@@ -12,7 +12,13 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "pretty-quick --pattern 'src/**/*.js'"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged --pattern 'src/**/*.js'"
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -22,5 +28,10 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "husky": "^1.3.1",
+    "prettier": "1.15.3",
+    "pretty-quick": "^1.10.0"
+  }
 }
