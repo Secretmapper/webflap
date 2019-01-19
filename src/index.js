@@ -3,6 +3,11 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { AppRegistry } from 'react-native'
 
+import Cytoscape from 'cytoscape'
+import edgehandles from 'cytoscape-edgehandles'
+
+Cytoscape.use(edgehandles)
+
 // register the app
 AppRegistry.registerComponent('App', () => App)
 
