@@ -39,8 +39,16 @@ export function AutomataEditor() {
   }
 
   const elements = [
-    { data: { id: 'q0', label: 'q0' }, position: { x: 50, y: 50 } },
-    { data: { id: 'q1', label: 'q1' }, position: { x: 150, y: 50 } },
+    {
+      data: { id: 'q0', label: 'q0' },
+      position: { x: 50, y: 50 },
+      classes: 'dfa__initial-state'
+    },
+    {
+      data: { id: 'q1', label: 'q1' },
+      position: { x: 150, y: 50 },
+      classes: 'dfa__final-state'
+    },
     { data: { source: 'q0', target: 'q1', label: 'a' }, classes: 'autorotate' }
   ]
 

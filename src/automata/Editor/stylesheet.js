@@ -3,19 +3,27 @@ export default [
     selector: 'node',
     style: {
       'background-color': 'white',
+      'background-image': 'url(assets/circle.svg)',
       'border-color': 'black',
       'border-width': 1,
       color: 'black',
       content: 'data(label)',
-      'text-valign': 'center',
       height: 50,
+      'text-valign': 'center',
       width: 50
     }
   },
   {
-    selector: '.autorotate',
+    selector: 'node.dfa__final-state',
     style: {
-      'edge-text-rotation': 'autorotate'
+      'background-fit': 'cover',
+      'background-image': 'url(assets/circle.svg)'
+    }
+  },
+  {
+    selector: 'node.dfa__initial-state',
+    style: {
+      'border-color': 'blue'
     }
   },
   {
@@ -28,6 +36,12 @@ export default [
       'text-background-color': 'white',
       'text-background-opacity': '1',
       'text-background-shape': 'rectangle'
+    }
+  },
+  {
+    selector: 'edge.autorotate',
+    style: {
+      'edge-text-rotation': 'autorotate'
     }
   },
   {
