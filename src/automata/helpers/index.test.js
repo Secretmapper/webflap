@@ -1,29 +1,6 @@
 import { step } from './index'
+import { initialState, states, transitions } from '../automata.fixtures'
 
-const position = { x: 0, y: 0 }
-const q0 = { data: { id: 'q0', label: 'q0' }, position }
-const q1 = { data: { id: 'q1', label: 'q1' }, position }
-const q2 = { data: { id: 'q2', label: 'q2' }, position }
-const q3 = { data: { id: 'q3', label: 'q3' }, position }
-const q4 = { data: { id: 'q4', label: 'q4' }, position }
-
-const states = new Map([
-  ['q0', q0],
-  ['q1', q1],
-  ['q2', q2],
-  ['q2', q3],
-  ['q4', q4]
-])
-
-const transitions = new Map([
-  ['q0-q1', { source: q0, target: q1, label: 'a' }],
-  ['q0-q2', { source: q0, target: q2, label: 'b' }],
-  ['q0-q3', { source: q0, target: q3, label: 'b' }],
-  ['q3-q4', { source: q3, target: q4, label: 'c' }],
-  ['q0-q0', { source: q0, target: q0, label: 's' }]
-])
-
-const initialState = 'q0'
 const createConfig = (input = 'a') => ({
   state: states.get(initialState),
   input,
