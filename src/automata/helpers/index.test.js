@@ -1,4 +1,4 @@
-import { step, isConfigAccepted } from './index'
+import { step, resolveConfig, isConfigAccepted } from './index'
 import {
   initialState,
   finalStates,
@@ -45,5 +45,13 @@ describe('automata', function() {
     const q3c = step(transitions, createConfig('bc'))
     const configs = step(transitions, q3c[1])
     expect(isConfigAccepted(finalStates, configs[0])).toBe(true)
+  })
+  it('resolveConfig returns accepted config when input is accepted', function() {
+    const config = resolveConfig(transitions, createConfig('bc'), finalStates)
+    expect(isConfigAccepted(finalStates, config)).toBe(true)
+  })
+  it('resolveConfig returns null when input is rejected', function() {
+    const config = resolveConfig(transitions, createConfig('bcd'), finalStates)
+    expect(config).toBeNull()
   })
 })
