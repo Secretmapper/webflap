@@ -17,7 +17,8 @@ export function AutomataEditor(props) {
       preview: false,
       edgeType: function(sourceNode, targetNode) {
         return sourceNode.edgesTo(targetNode).empty() ? 'flat' : null
-      }
+      },
+      complete: onEdgeCreate
     })
 
     const onSurfaceClick = evt => {
@@ -44,6 +45,16 @@ export function AutomataEditor(props) {
       node.data('label', '')
       setEditing({ x, y, id: node.id(), type: 'node' })
       inputEl.current.focus()
+    }
+    function onEdgeCreate(sourceNode, targetNode, addedEles) {
+      // TODO: Have all these data handled in one place
+      props.transitions.set(addedEles.id(), {
+        id: addedEles.id,
+        label: addedEles.label,
+        source: { data: sourceNode.data() },
+        target: { data: targetNode.data() }
+      })
+      addedEles.addClass('autorotate')
     }
     const onEdgeEdit = e => {
       const edge = e.target
