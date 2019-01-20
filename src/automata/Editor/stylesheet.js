@@ -14,14 +14,14 @@ export default [
     }
   },
   {
-    selector: 'node.dfa__final-state',
+    selector: 'node.dfa__state--final',
     style: {
       'background-fit': 'cover',
       'background-image': 'url(assets/circle.svg)'
     }
   },
   {
-    selector: 'node.dfa__initial-state',
+    selector: 'node.dfa__state--initial',
     style: {
       'border-color': 'blue'
     }
