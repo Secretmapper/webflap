@@ -37,6 +37,10 @@ export function step (
 
   // XXX: map && compact this?
   transitions.forEach((transition) => {
+    if (configuration.state.data.id !== transition.source.data.id) {
+      return 
+    }
+
     const transLabel = transition.label
 
     if (unprocessedInput.startsWith(transLabel)) {
