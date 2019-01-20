@@ -40,7 +40,10 @@ export default function Automata() {
 
   return (
     <View style={styles.container}>
-      <Editor elements={elements} />
+      <Editor
+        elements={elements}
+        stepping={configs.map(c => c.state.data.id)}
+      />
       <Configurations configurations={configs} />
       <Controls onNext={onNext} />
     </View>

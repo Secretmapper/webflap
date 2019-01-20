@@ -6,6 +6,7 @@ import cyStylesheet from './stylesheet'
 export function AutomataEditor(props) {
   const cyRef = useRef(null)
   const inputEl = useRef(null)
+  const [prevStepping, setPrevStepping] = useState(props.stepping)
   const [editing, setEditing] = useState(null)
 
   const setCy = internal => {
@@ -47,7 +48,10 @@ export function AutomataEditor(props) {
 
     cy.on('tap', onSurfaceClick)
     cy.on('taphold', 'node.dfa__state', onNodeEdit)
+    updateSteppingClasses()
   }
+
+  updateSteppingClasses()
 
   const onNodeLabelInputBlur = e => {
     const cy = cyRef.current
@@ -72,6 +76,23 @@ export function AutomataEditor(props) {
       )}
     </View>
   )
+
+  function updateSteppingClasses() {
+    if (!cyRef.current) return
+    if (props.stepping !== prevStepping) {
+      for (let i = 0; i < prevStepping.length; i++) {
+        cyRef.current
+          .getElementById(prevStepping[i])
+          .removeClass('dfa__state--stepping')
+      }
+      setPrevStepping(props.stepping)
+    }
+    for (let i = 0; i < props.stepping.length; i++) {
+      cyRef.current
+        .getElementById(props.stepping[i])
+        .addClass('dfa__state--stepping')
+    }
+  }
 }
 
 // Cytoscape that only uses elements as initial data

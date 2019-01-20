@@ -27,6 +27,14 @@ export default [
     }
   },
   {
+    selector: 'node.dfa__state--stepping',
+    style: {
+      'background-color': '#61bffc',
+      'transition-property': 'background-color',
+      'transition-duration': '0.2s'
+    }
+  },
+  {
     selector: 'edge',
     style: {
       label: 'data(label)',
