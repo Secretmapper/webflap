@@ -6,14 +6,20 @@ import Editor from './Editor'
 import Configurations from './Configurations'
 import Controls from './Controls'
 import { step } from './helpers'
-import { initialState, states, transitions } from './automata.fixtures'
+import {
+  initialState,
+  finalStates,
+  states,
+  transitions
+} from './automata.fixtures'
 
 const elements = [
   ...Array.from(states.values()).map(state => ({
     ...state,
     classes: [
       'dfa__state',
-      initialState === state.data.id ? 'dfa__state--initial' : ''
+      initialState === state.data.id ? 'dfa__state--initial' : '',
+      finalStates.indexOf(state.data.id) !== -1 ? 'dfa__state--final' : ''
     ]
   })),
   ...Array.from(transitions.values()).map(trans => ({
@@ -69,7 +75,7 @@ export default function Automata() {
             onPlay={onPlay}
             onNext={onNext}
           />
-          <Configurations configurations={configs} />
+          <Configurations finalStates={finalStates} configurations={configs} />
         </View>
       }
     />

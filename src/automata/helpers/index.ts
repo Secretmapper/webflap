@@ -56,3 +56,10 @@ export function step (
 
   return configs
 }
+
+export function isConfigAccepted(finalStates: Array<string>, config: AutomataConfiguration) {
+  return (
+    config.unprocessed.length === 0
+    && finalStates.indexOf(config.state.data.id) !== -1
+  )
+}

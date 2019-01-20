@@ -1,12 +1,17 @@
 import React, { useRef } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { isConfigAccepted } from '../helpers'
 import useHover from '../../core/hooks/useHover'
 
 export default function Configurations(props) {
   return (
     <View style={styles.container}>
       {props.configurations.map(config => (
-        <Config key={config.hash} config={config} />
+        <Config
+          key={config.hash}
+          config={config}
+          finalStates={props.finalStates}
+        />
       ))}
     </View>
   )
@@ -19,7 +24,11 @@ function Config(props) {
   return (
     <View
       ref={touchableRef}
-      style={[styles.config, !!isHovered && styles.configHovered]}
+      style={[
+        styles.config,
+        !!isHovered && styles.configHovered,
+        isConfigAccepted(props.finalStates, props.config) && styles.configFinal
+      ]}
     >
       <Text>{props.config.state.data.label}</Text>
       <Text>
@@ -50,6 +59,9 @@ const styles = StyleSheet.create({
   configHovered: {
     borderColor: 'rgba(0, 0, 0, 0.15)',
     boxShadow: '0 3px 9px 0 rgba(46, 50, 60, .09)'
+  },
+  configFinal: {
+    backgroundColor: '#ccff90'
   },
   processed: {
     color: 'green'

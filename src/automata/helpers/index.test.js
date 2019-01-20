@@ -1,5 +1,10 @@
-import { step } from './index'
-import { initialState, states, transitions } from '../automata.fixtures'
+import { step, isConfigAccepted } from './index'
+import {
+  initialState,
+  finalStates,
+  states,
+  transitions
+} from '../automata.fixtures'
 
 const createConfig = (input = 'a') => ({
   state: states.get(initialState),
@@ -35,5 +40,10 @@ describe('automata', function() {
     const configs = step(transitions, q3c[1])
     expect(configs).toHaveLength(1)
     expect(configs[0].state.data.id).toBe('q4')
+  })
+  it('recognizes accepted state config', function() {
+    const q3c = step(transitions, createConfig('bc'))
+    const configs = step(transitions, q3c[1])
+    expect(isConfigAccepted(finalStates, configs[0])).toBe(true)
   })
 })
