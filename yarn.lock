@@ -808,6 +808,16 @@
   version "23.3.13"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.13.tgz#c81484b6f4ca007bb09887ed15ecb3286d58f928"
 
+"@types/lodash.flatten@^4.4.4":
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/@types/lodash.flatten/-/lodash.flatten-4.4.4.tgz#7f28009ef57c8d2b1d8463c3e53fdccf780120a5"
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  version "4.14.120"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.120.tgz#cf265d06f6c7a710db087ed07523ab8c1a24047b"
+
 "@types/node@^10.12.18":
   version "10.12.18"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.18.tgz#1d3ca764718915584fcd9f6344621b7672665c67"
