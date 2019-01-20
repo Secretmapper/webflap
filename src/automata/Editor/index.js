@@ -2,6 +2,25 @@ import React, { useRef, useState } from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
 import Cytoscape from 'react-cytoscapejs'
 import cyStylesheet from './stylesheet'
+import { initialState, states, transitions } from '../automata.fixtures'
+
+const elements = [
+  ...Array.from(states.values()).map(state => ({
+    ...state,
+    classes: [
+      'dfa__state',
+      initialState === state.data.id ? 'dfa__state--initial' : ''
+    ]
+  })),
+  ...Array.from(transitions.values()).map(trans => ({
+    data: {
+      source: trans.source.data.id,
+      target: trans.target.data.id,
+      label: trans.label
+    },
+    classes: 'autorotate'
+  }))
+]
 
 export function AutomataEditor() {
   const cyRef = useRef(null)
@@ -55,27 +74,13 @@ export function AutomataEditor() {
     setEditing(null)
   }
 
-  const elements = [
-    {
-      data: { id: 'q0', label: 'q0' },
-      position: { x: 50, y: 50 },
-      classes: ['dfa__state', 'dfa__state--initial']
-    },
-    {
-      data: { id: 'q1', label: 'q1' },
-      position: { x: 150, y: 50 },
-      classes: ['dfa__state', 'dfa__state--final']
-    },
-    { data: { source: 'q0', target: 'q1', label: 'a' }, classes: 'autorotate' }
-  ]
-
   return (
     <View style={styles.container}>
       <UncontrolledCytoscape
         cy={setCy}
         elements={elements}
         stylesheet={cyStylesheet}
-        style={{ height: '600px', width: '600px' }}
+        style={{ height: '400px', width: '600px' }}
       />
       {editing && (
         <TextInput
