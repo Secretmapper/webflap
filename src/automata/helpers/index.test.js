@@ -25,9 +25,14 @@ describe('automata', function() {
     expect(configs[0].state.data.id).toBe('q0')
     expect(configs).toHaveLength(1)
   })
-  it('travels path', function() {
+  it("don't travel when there is no transition", function() {
     const q3c = step(transitions, createConfig('bc'))
     const configs = step(transitions, q3c[0])
+    expect(configs).toHaveLength(0)
+  })
+  it('travels path', function() {
+    const q3c = step(transitions, createConfig('bc'))
+    const configs = step(transitions, q3c[1])
     expect(configs).toHaveLength(1)
     expect(configs[0].state.data.id).toBe('q4')
   })
