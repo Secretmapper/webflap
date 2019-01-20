@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import Heading from '../core/Heading'
+import Layout from './Layout'
 import Editor from './Editor'
 import Configurations from './Configurations'
 import Controls from './Controls'
@@ -47,25 +49,46 @@ export default function Automata() {
   }
 
   return (
-    <View style={styles.container}>
-      <Editor
-        elements={elements}
-        transitions={transitions}
-        stepping={configs.map(c => c.state.data.id)}
-      />
-      <Configurations configurations={configs} />
-      <Controls
-        inputString={inputString}
-        onInputStringChange={onInputStringChange}
-        onPlay={onPlay}
-        onNext={onNext}
-      />
-    </View>
+    <Layout
+      main={
+        <Editor
+          elements={elements}
+          transitions={transitions}
+          stepping={configs.map(c => c.state.data.id)}
+        />
+      }
+      side={
+        <View style={styles.side}>
+          <Heading style={styles.heading}>WebFLAP</Heading>
+          <Heading style={styles.subheading}>
+            Modern Finite Automaton Maker and Visualizer
+          </Heading>
+          <Controls
+            inputString={inputString}
+            onInputStringChange={onInputStringChange}
+            onPlay={onPlay}
+            onNext={onNext}
+          />
+          <Configurations configurations={configs} />
+        </View>
+      }
+    />
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
+  side: {
+    borderRightWidth: 1,
+    borderColor: '#e1e4e8',
+    padding: 20,
+    height: '100%'
+  },
+  heading: {
+    textAlign: 'center'
+  },
+  subheading: {
+    textAlign: 'center',
+    fontSize: 13,
+    paddingBottom: 8
   }
 })
