@@ -22,6 +22,7 @@ type AutomataTransitions = Map<string, AutomataTransition>
  * Configuration of the current state step in an automaton
  **/
 type AutomataConfiguration = {
+  hash: string,
   state: AutomataState,
   input: string,
   unprocessed: string
@@ -40,6 +41,8 @@ export function step (
 
     if (unprocessedInput.startsWith(transLabel)) {
       configs.push({
+        // TODO: use a hash from the path?
+        hash: '' + Math.random(),
         state: transition.target,
         input: configuration.input,
         unprocessed: unprocessedInput.substr(transLabel.length)
