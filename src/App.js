@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import AutomataEditor from './automata/Editor'
+import Automata from './automata'
 
 class App extends Component {
   render() {
-    return <AutomataEditor />
+    return <Automata />
   }
 }
 
