@@ -24,7 +24,6 @@ export function AutomataEditor(props) {
       const target = evt.target || evt.cyTarget
       if (target === cy) {
         cy.add({
-          classes: 'automove-viewport',
           data: {
             // TODO: Add actual uuid generation
             id: 'new' + Math.round(Math.random() * 100),
@@ -33,7 +32,8 @@ export function AutomataEditor(props) {
           position: {
             x: evt.position.x,
             y: evt.position.y
-          }
+          },
+          classes: ['dfa__state']
         })
       }
     }
