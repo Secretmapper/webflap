@@ -42,6 +42,7 @@ const initialConfig = (input = 'bc') => ({
 
 export default function Automata() {
   const [configs, setConfigs] = useState([initialConfig()])
+  const [rejectedConfigs, setRejectedConfigs] = useState([])
   const [inputString, setInputString] = useState('bc')
 
   const onInputStringChange = e => {
@@ -51,7 +52,22 @@ export default function Automata() {
     setConfigs([initialConfig(inputString)])
   }
   const onNext = () => {
-    setConfigs(configs.map(c => step(transitions, c)).flat())
+    const newConfigs = []
+    const newRejectedConfigs = []
+
+    for (let i = 0; i < configs.length; i++) {
+      const stepConfigs = step(transitions, configs[i])
+      const isConfigRejected = stepConfigs.length === 0
+
+      if (isConfigRejected) {
+        newRejectedConfigs.push(configs[i])
+      } else {
+        newConfigs.push(stepConfigs)
+      }
+    }
+
+    setConfigs(newConfigs.flat())
+    setRejectedConfigs(newRejectedConfigs)
   }
 
   return (
@@ -75,7 +91,11 @@ export default function Automata() {
             onPlay={onPlay}
             onNext={onNext}
           />
-          <Configurations finalStates={finalStates} configurations={configs} />
+          <Configurations
+            finalStates={finalStates}
+            rejected={rejectedConfigs}
+            configurations={configs}
+          />
         </View>
       }
     />

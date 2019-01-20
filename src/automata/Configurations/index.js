@@ -6,6 +6,14 @@ import useHover from '../../core/hooks/useHover'
 export default function Configurations(props) {
   return (
     <View style={styles.container}>
+      {props.rejected.map(config => (
+        <Config
+          rejected
+          key={config.hash}
+          config={config}
+          finalStates={props.finalStates}
+        />
+      ))}
       {props.configurations.map(config => (
         <Config
           key={config.hash}
@@ -27,6 +35,7 @@ function Config(props) {
       style={[
         styles.config,
         !!isHovered && styles.configHovered,
+        props.rejected && styles.configRejected,
         isConfigAccepted(props.finalStates, props.config) && styles.configFinal
       ]}
     >
@@ -59,6 +68,9 @@ const styles = StyleSheet.create({
   configHovered: {
     borderColor: 'rgba(0, 0, 0, 0.15)',
     boxShadow: '0 3px 9px 0 rgba(46, 50, 60, .09)'
+  },
+  configRejected: {
+    backgroundColor: '#ffebee'
   },
   configFinal: {
     backgroundColor: '#ccff90'
