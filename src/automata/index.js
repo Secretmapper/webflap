@@ -34,7 +34,14 @@ const initialConfig = (input = 'bc') => ({
 
 export default function Automata() {
   const [configs, setConfigs] = useState([initialConfig()])
+  const [inputString, setInputString] = useState('bc')
 
+  const onInputStringChange = e => {
+    setInputString(e.target.value)
+  }
+  const onPlay = () => {
+    setConfigs([initialConfig(inputString)])
+  }
   const onNext = () => {
     setConfigs(configs.map(c => step(transitions, c)).flat())
   }
@@ -47,7 +54,12 @@ export default function Automata() {
         stepping={configs.map(c => c.state.data.id)}
       />
       <Configurations configurations={configs} />
-      <Controls onNext={onNext} />
+      <Controls
+        inputString={inputString}
+        onInputStringChange={onInputStringChange}
+        onPlay={onPlay}
+        onNext={onNext}
+      />
     </View>
   )
 }

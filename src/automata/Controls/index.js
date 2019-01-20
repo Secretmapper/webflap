@@ -1,10 +1,16 @@
 import React from 'react'
-import { StyleSheet, Button, View } from 'react-native'
+import { StyleSheet, Button, TextInput, View } from 'react-native'
 
 export default function Controls(props) {
   return (
     <View style={styles.container}>
-      <Button title="Play" onPress={() => {}} />
+      <TextInput
+        value={props.inputString}
+        onChange={props.onInputStringChange}
+        style={styles.input}
+        placeholder="Input String"
+      />
+      <Button title="Play" onPress={props.onPlay} />
       <Button title="Next" onPress={props.onNext} />
     </View>
   )
@@ -13,5 +19,8 @@ export default function Controls(props) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row'
+  },
+  input: {
+    outline: 'none'
   }
 })
