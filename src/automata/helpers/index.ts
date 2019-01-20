@@ -1,3 +1,5 @@
+import flatten from 'lodash.flatten'
+
 type AutomataState = {
   data: {
     id: string,
@@ -62,4 +64,25 @@ export function isConfigAccepted(finalStates: Array<string>, config: AutomataCon
     config.unprocessed.length === 0
     && finalStates.indexOf(config.state.data.id) !== -1
   )
+}
+
+export function resolveConfig(
+  transitions:AutomataTransitions,
+  configuration: AutomataConfiguration,
+  finalStates: Array<string>
+) {
+  const lIsConfigAccepted = (config: AutomataConfiguration) => isConfigAccepted(finalStates, config)
+  let configs = [configuration]
+
+  do {
+    for (let i = 0; i < configs.length; i++) {
+      if (lIsConfigAccepted(configs[i])) {
+        return configs[i]
+      }
+    }
+
+    configs = flatten(configs.map(c => step(transitions, c)))
+  } while (configs.length !== 0)
+
+  return null
 }
