@@ -13,11 +13,11 @@ export const states = new Map([
 ])
 
 export const transitions = new Map([
-  ['q0-q1', { source: q0, target: q1, label: 'a' }],
-  ['q0-q2', { source: q0, target: q2, label: 'b' }],
-  ['q0-q3', { source: q0, target: q3, label: 'b' }],
-  ['q3-q4', { source: q3, target: q4, label: 'c' }],
-  ['q0-q0', { source: q0, target: q0, label: 's' }]
+  ['q0-q1', { id: 'q0-q1', source: q0, target: q1, label: 'a' }],
+  ['q0-q2', { id: 'q0-q2', source: q0, target: q2, label: 'b' }],
+  ['q0-q3', { id: 'q0-q3', source: q0, target: q3, label: 'b' }],
+  ['q3-q4', { id: 'q0-q4', source: q3, target: q4, label: 'c' }],
+  ['q0-q0', { id: 'q0-q0', source: q0, target: q0, label: 's' }]
 ])
 
 export const initialState = 'q0'

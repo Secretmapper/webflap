@@ -16,6 +16,7 @@ const elements = [
   })),
   ...Array.from(transitions.values()).map(trans => ({
     data: {
+      id: trans.id,
       source: trans.source.data.id,
       target: trans.target.data.id,
       label: trans.label
@@ -42,6 +43,7 @@ export default function Automata() {
     <View style={styles.container}>
       <Editor
         elements={elements}
+        transitions={transitions}
         stepping={configs.map(c => c.state.data.id)}
       />
       <Configurations configurations={configs} />

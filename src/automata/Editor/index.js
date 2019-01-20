@@ -42,12 +42,21 @@ export function AutomataEditor(props) {
       const { x, y } = node.position()
 
       node.data('label', '')
-      setEditing({ x, y, id: node.id() })
+      setEditing({ x, y, id: node.id(), type: 'node' })
+      inputEl.current.focus()
+    }
+    const onEdgeEdit = e => {
+      const edge = e.target
+      const { x, y } = edge.midpoint()
+
+      edge.data('label', '')
+      setEditing({ x, y, id: edge.id(), type: 'edge' })
       inputEl.current.focus()
     }
 
     cy.on('tap', onSurfaceClick)
     cy.on('taphold', 'node.dfa__state', onNodeEdit)
+    cy.on('taphold', 'edge', onEdgeEdit)
     updateSteppingClasses()
   }
 
@@ -55,7 +64,16 @@ export function AutomataEditor(props) {
 
   const onNodeLabelInputBlur = e => {
     const cy = cyRef.current
+
     cy.$(`#${editing.id}`).data('label', e.target.value)
+    // update root transitions object as well
+    // unfortunately we have to do this dirty
+    // hack since there are two sources of truth
+    const trans = props.transitions.get(editing.id)
+    if (trans && editing.type === 'edge') {
+      trans.label = e.target.value
+    }
+
     setEditing(null)
   }
 
