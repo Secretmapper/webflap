@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import flatten from 'lodash.flatten'
 import Heading from '../core/Heading'
 import Layout from './Layout'
 import Editor from './Editor'
 import Configurations from './Configurations'
+import MultipleInput from './MultipleInput'
 import Controls from './Controls'
-import { step } from './helpers'
+import { step, resolveConfig } from './helpers'
 import {
   initialState,
   finalStates,
@@ -42,6 +44,18 @@ const initialConfig = (input = 'bc') => ({
 
 export default function Automata() {
   const [configs, setConfigs] = useState([initialConfig()])
+  const [multipleInput, setMultipleInput] = useState([
+    'b',
+    'bc',
+    'ssbc',
+    'ss',
+    'abc'
+  ])
+  const [multipleInputConfigs, setMultipleInputConfigs] = useState(
+    multipleInput.map(input =>
+      resolveConfig(transitions, initialConfig(input), finalStates)
+    )
+  )
   const [rejectedConfigs, setRejectedConfigs] = useState([])
   const [inputString, setInputString] = useState('bc')
 
@@ -66,7 +80,7 @@ export default function Automata() {
       }
     }
 
-    setConfigs(newConfigs.flat())
+    setConfigs(flatten(newConfigs))
     setRejectedConfigs(newRejectedConfigs)
   }
 
@@ -95,6 +109,10 @@ export default function Automata() {
             finalStates={finalStates}
             rejected={rejectedConfigs}
             configurations={configs}
+          />
+          <MultipleInput
+            strings={multipleInput}
+            configs={multipleInputConfigs}
           />
         </View>
       }
