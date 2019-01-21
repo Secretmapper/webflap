@@ -3,6 +3,16 @@ import { StyleSheet, Button, Text, TextInput, View } from 'react-native'
 import Heading from '../../core/Heading'
 
 export default function MultipleInputEditor(props) {
+  const [multilineInput, setMultipleInput] = useState(
+    props.currMultipleInput.join('\n')
+  )
+  const onMultilineInputChange = e => {
+    setMultipleInput(e.target.value)
+  }
+  const onSaveMultilineInput = e => {
+    props.onSaveMultilineInput(multilineInput.split('\n'))
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.column}>
@@ -14,10 +24,12 @@ export default function MultipleInputEditor(props) {
         </Heading>
         <TextInput
           style={styles.editorText}
+          value={multilineInput}
+          onChange={onMultilineInputChange}
           multiline
           placeholer="Input cases"
         />
-        <Button title="Save" onPress={props.onSaveMultilineInput} />
+        <Button title="Save" onPress={onSaveMultilineInput} />
       </View>
       <View style={[styles.column, styles.columnEditor]}>
         <View style={styles.upload}>

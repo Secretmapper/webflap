@@ -26,10 +26,20 @@ export default function Controls(props) {
     multipleInputConfigs
   } = props
 
+  const onSaveMultilineInput = value => {
+    setShowModal(false)
+    props.setMultipleInput(value)
+  }
+
   return (
     <View style={styles.side}>
       <Modal style={styles.modal} transparent={true} isVisible={showModal}>
-        <MultipleInputEditor />
+        {showModal && (
+          <MultipleInputEditor
+            currMultipleInput={props.multipleInput}
+            onSaveMultilineInput={onSaveMultilineInput}
+          />
+        )}
       </Modal>
       <Heading style={styles.heading}>WebFLAP</Heading>
       <Heading style={styles.subheading}>

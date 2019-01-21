@@ -56,6 +56,14 @@ export default function Automata() {
   const [rejectedConfigs, setRejectedConfigs] = useState([])
   const [inputString, setInputString] = useState('bc')
 
+  const onSetMultipleInput = value => {
+    setMultipleInput(value)
+    setMultipleInputConfigs(
+      value.map(input =>
+        resolveConfig(transitions, initialConfig(input), finalStates)
+      )
+    )
+  }
   const onConfigHover = (config, hoveringIn) => {
     if (hoveringIn) {
       setConfigBeingHovered(config)
@@ -109,6 +117,7 @@ export default function Automata() {
           configs={configs}
           onConfigHover={onConfigHover}
           multipleInput={multipleInput}
+          setMultipleInput={onSetMultipleInput}
           multipleInputConfigs={multipleInputConfigs}
         />
       }
