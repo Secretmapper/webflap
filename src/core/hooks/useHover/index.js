@@ -1,4 +1,6 @@
 // https://github.com/devhubapp/devhub/blob/master/packages/components/src/hooks/use-hover.ts
+// mouseover/out -> mouseenter/leave
+// https://stackoverflow.com/questions/350639/how-to-disable-mouseout-events-triggered-by-child-elements
 
 import { useEffect, useRef, useState } from 'react'
 import { findDOMNode } from 'react-dom'
@@ -33,14 +35,14 @@ export default function useHover(ref, callback) {
       const handleMouseOver = () => resolve(true)
       const handleMouseOut = () => resolve(false)
 
-      node.addEventListener('mouseover', handleMouseOver)
-      node.addEventListener('mouseout', handleMouseOut)
+      node.addEventListener('mouseenter', handleMouseOver)
+      node.addEventListener('mouseleave', handleMouseOut)
 
       return () => {
         if (!node) return
 
-        node.removeEventListener('mouseover', handleMouseOver)
-        node.removeEventListener('mouseout', handleMouseOut)
+        node.removeEventListener('mouseenter', handleMouseOver)
+        node.removeEventListener('mouseleave', handleMouseOut)
       }
     },
     [ref && ref.current, callback]
