@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
-import { StyleSheet, Button, View } from 'react-native'
+import { StyleSheet, Button, Text, View } from 'react-native'
+import Modal from 'modal-enhanced-react-native-web'
 import Heading from '../../core/Heading'
 import Configurations from '../Configurations'
 import MultipleInput from '../MultipleInput'
+import MultipleInputEditor from '../MultipleInputEditor'
 import StepByStepControls from '../StepByStepControls'
 
 export default function Controls(props) {
   const [tab, setTab] = useState(null)
+  const [showModal, setShowModal] = useState(false)
 
   const {
     inputString,
@@ -25,6 +28,9 @@ export default function Controls(props) {
 
   return (
     <View style={styles.side}>
+      <Modal style={styles.modal} transparent={true} isVisible={showModal}>
+        <MultipleInputEditor />
+      </Modal>
       <Heading style={styles.heading}>WebFLAP</Heading>
       <Heading style={styles.subheading}>
         Modern Finite Automaton Maker and Visualizer
@@ -43,7 +49,7 @@ export default function Controls(props) {
       )}
       {tab === 'multipleRun' && (
         <React.Fragment>
-          <NavButton title="Load Inputs" onPress={() => ''} />
+          <NavButton title="Load Inputs" onPress={() => setShowModal(true)} />
           <MultipleInput
             strings={multipleInput}
             configs={multipleInputConfigs}
@@ -84,6 +90,14 @@ const styles = StyleSheet.create({
     borderColor: '#e1e4e8',
     padding: 20,
     height: '100%'
+  },
+  modal: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+    borderRadius: 4,
+    justifyContent: 'center',
+    overflow: 'hidden'
   },
   heading: {
     textAlign: 'center'
