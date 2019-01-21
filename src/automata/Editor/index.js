@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
 import Cytoscape from 'react-cytoscapejs'
 import cyStylesheet from './stylesheet'
@@ -11,6 +11,31 @@ export function AutomataEditor(props) {
     props.configHovered
   )
   const [editing, setEditing] = useState(null)
+
+  useEffect(
+    () => {
+      const cy = cyRef.current
+      let raf
+      let animOffset = 0
+
+      function animate() {
+        animOffset++
+        cy.edges().animate({
+          style: { 'line-dash-offset': -animOffset }
+        })
+        raf = requestAnimationFrame(animate)
+      }
+
+      animate()
+
+      return () => {
+        if (raf) {
+          cancelAnimationFrame(raf)
+        }
+      }
+    },
+    ['once']
+  )
 
   const setCy = internal => {
     cyRef.current = internal
