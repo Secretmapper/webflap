@@ -40,7 +40,7 @@ export function AutomataEditor(props) {
     }
     const onNodeEdit = e => {
       const node = e.target
-      const { x, y } = node.position()
+      const { x, y } = node.renderedPosition()
 
       node.data('label', '')
       setEditing({ x, y, id: node.id(), type: 'node' })
@@ -58,7 +58,7 @@ export function AutomataEditor(props) {
     }
     const onEdgeEdit = e => {
       const edge = e.target
-      const { x, y } = edge.midpoint()
+      const { x, y } = edge.renderedMidpoint()
 
       edge.data('label', '')
       setEditing({ x, y, id: edge.id(), type: 'edge' })
