@@ -86,7 +86,7 @@ export default function Automata() {
         <Editor
           elements={elements}
           transitions={transitions}
-          stepping={configs.map(c => c.state.data.id)}
+          stepping={configs}
         />
       }
       side={

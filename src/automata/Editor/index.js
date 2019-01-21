@@ -111,15 +111,16 @@ export function AutomataEditor(props) {
     if (props.stepping !== prevStepping) {
       for (let i = 0; i < prevStepping.length; i++) {
         cyRef.current
-          .getElementById(prevStepping[i])
+          .getElementById(prevStepping[i].state.data.id)
           .removeClass('dfa__state--stepping')
       }
       setPrevStepping(props.stepping)
-    }
-    for (let i = 0; i < props.stepping.length; i++) {
-      cyRef.current
-        .getElementById(props.stepping[i])
-        .addClass('dfa__state--stepping')
+
+      for (let i = 0; i < props.stepping.length; i++) {
+        cyRef.current
+          .getElementById(props.stepping[i].state.data.id)
+          .addClass('dfa__state--stepping')
+      }
     }
   }
 }
