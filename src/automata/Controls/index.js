@@ -17,6 +17,7 @@ export default function Controls(props) {
     finalStates,
     rejectedConfigs,
     configs,
+    onConfigHover,
 
     multipleInput,
     multipleInputConfigs
@@ -61,6 +62,7 @@ export default function Controls(props) {
             finalStates={finalStates}
             rejected={rejectedConfigs}
             configurations={configs}
+            onConfigHover={onConfigHover}
           />
         </React.Fragment>
       )}

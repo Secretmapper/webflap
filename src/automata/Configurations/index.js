@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { isConfigAccepted } from '../helpers'
 import useHover from '../../core/hooks/useHover'
@@ -11,6 +11,7 @@ export default function Configurations(props) {
           rejected
           key={config.hash}
           config={config}
+          onHover={props.onConfigHover}
           finalStates={props.finalStates}
         />
       ))}
@@ -18,6 +19,7 @@ export default function Configurations(props) {
         <Config
           key={config.hash}
           config={config}
+          onHover={props.onConfigHover}
           finalStates={props.finalStates}
         />
       ))}
@@ -27,7 +29,11 @@ export default function Configurations(props) {
 
 function Config(props) {
   const touchableRef = useRef(null)
-  const isHovered = useHover(touchableRef)
+  const [isHovered, setIsHovered] = useState(false)
+  useHover(touchableRef, hovering => {
+    setIsHovered(hovering)
+    props.onHover(props.config, hovering)
+  })
 
   return (
     <View

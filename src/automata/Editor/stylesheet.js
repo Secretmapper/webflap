@@ -35,6 +35,14 @@ export default [
     }
   },
   {
+    selector: 'node.dfa__state--config-hover',
+    style: {
+      'background-color': 'red',
+      'transition-property': 'background-color',
+      'transition-duration': '0.2s'
+    }
+  },
+  {
     selector: 'edge',
     style: {
       label: 'data(label)',

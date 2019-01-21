@@ -40,6 +40,7 @@ const initialConfig = (input = 'bc') => ({
 
 export default function Automata() {
   const [configs, setConfigs] = useState([initialConfig()])
+  const [configBeingHovered, setConfigBeingHovered] = useState(null)
   const [multipleInput, setMultipleInput] = useState([
     'b',
     'bc',
@@ -55,6 +56,13 @@ export default function Automata() {
   const [rejectedConfigs, setRejectedConfigs] = useState([])
   const [inputString, setInputString] = useState('bc')
 
+  const onConfigHover = (config, hoveringIn) => {
+    if (hoveringIn) {
+      setConfigBeingHovered(config)
+    } else {
+      setConfigBeingHovered(null)
+    }
+  }
   const onInputStringChange = e => {
     setInputString(e.target.value)
   }
@@ -87,6 +95,7 @@ export default function Automata() {
           elements={elements}
           transitions={transitions}
           stepping={configs}
+          configHovered={configBeingHovered}
         />
       }
       side={
@@ -98,6 +107,7 @@ export default function Automata() {
           finalStates={finalStates}
           rejectedConfigs={rejectedConfigs}
           configs={configs}
+          onConfigHover={onConfigHover}
           multipleInput={multipleInput}
           multipleInputConfigs={multipleInputConfigs}
         />

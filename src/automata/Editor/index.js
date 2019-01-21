@@ -7,6 +7,9 @@ export function AutomataEditor(props) {
   const cyRef = useRef(null)
   const inputEl = useRef(null)
   const [prevStepping, setPrevStepping] = useState(props.stepping)
+  const [prevConfigHovered, setPrevConfigHovered] = useState(
+    props.configHovered
+  )
   const [editing, setEditing] = useState(null)
 
   const setCy = internal => {
@@ -69,9 +72,11 @@ export function AutomataEditor(props) {
     cy.on('taphold', 'node.dfa__state', onNodeEdit)
     cy.on('taphold', 'edge', onEdgeEdit)
     updateSteppingClasses()
+    updateConfigHoveredClasses()
   }
 
   updateSteppingClasses()
+  updateConfigHoveredClasses()
 
   const onNodeLabelInputBlur = e => {
     const cy = cyRef.current
@@ -120,6 +125,23 @@ export function AutomataEditor(props) {
         cyRef.current
           .getElementById(props.stepping[i].state.data.id)
           .addClass('dfa__state--stepping')
+      }
+    }
+  }
+
+  function updateConfigHoveredClasses() {
+    if (!cyRef.current) return
+
+    if (props.configHovered !== prevConfigHovered) {
+      setPrevConfigHovered(props.configHovered)
+      if (props.configHovered) {
+        cyRef.current
+          .getElementById(props.configHovered.state.data.id)
+          .addClass('dfa__state--config-hover')
+      } else if (prevConfigHovered) {
+        cyRef.current
+          .getElementById(prevConfigHovered.state.data.id)
+          .removeClass('dfa__state--config-hover')
       }
     }
   }
