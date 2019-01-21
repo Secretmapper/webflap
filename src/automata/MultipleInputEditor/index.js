@@ -18,9 +18,9 @@ export default function MultipleInputEditor(props) {
       <View style={styles.column}>
         <Heading style={styles.heading}>
           Editor
-          <Heading style={styles.headingSmall}>
+          <Text style={styles.headingSmall}>
             (separate test input by newline)
-          </Heading>
+          </Text>
         </Heading>
         <TextInput
           style={styles.editorText}
