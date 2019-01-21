@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Button, Text, View } from 'react-native'
+import { StyleSheet, Button, View } from 'react-native'
 import Modal from 'modal-enhanced-react-native-web'
 import Heading from '../../core/Heading'
 import Configurations from '../Configurations'
@@ -63,6 +63,7 @@ export default function Controls(props) {
           <MultipleInput
             strings={multipleInput}
             configs={multipleInputConfigs}
+            onConfigHover={onConfigHover}
           />
         </React.Fragment>
       )}

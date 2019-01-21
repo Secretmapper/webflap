@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import useHover from '../../core/hooks/useHover'
 
@@ -6,7 +6,12 @@ export default function MultipleInput(props) {
   return (
     <View>
       {props.strings.map((string, i) => (
-        <Row key={string} string={string} config={props.configs[i]} />
+        <Row
+          key={string}
+          string={string}
+          config={props.configs[i]}
+          onHover={props.onConfigHover}
+        />
       ))}
     </View>
   )
@@ -14,7 +19,11 @@ export default function MultipleInput(props) {
 
 function Row(props) {
   const touchableRef = useRef(null)
-  const isHovered = useHover(touchableRef)
+  const [isHovered, setIsHovered] = useState(false)
+  useHover(touchableRef, hovering => {
+    setIsHovered(hovering)
+    props.onHover(props.config, hovering)
+  })
   const accepted = !!props.config
 
   return (
