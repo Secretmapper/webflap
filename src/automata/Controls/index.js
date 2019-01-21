@@ -33,7 +33,12 @@ export default function Controls(props) {
 
   return (
     <View style={styles.side}>
-      <Modal style={styles.modal} transparent={true} isVisible={showModal}>
+      <Modal
+        style={styles.modal}
+        transparent={true}
+        isVisible={showModal}
+        onBackdropPress={() => setShowModal(false)}
+      >
         {showModal && (
           <MultipleInputEditor
             currMultipleInput={props.multipleInput}
