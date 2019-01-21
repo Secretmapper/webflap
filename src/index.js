@@ -2,6 +2,7 @@ import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { AppRegistry } from 'react-native'
+import 'typeface-montserrat'
 
 import Cytoscape from 'cytoscape'
 import edgehandles from 'cytoscape-edgehandles'
