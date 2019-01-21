@@ -132,16 +132,39 @@ export function AutomataEditor(props) {
   function updateConfigHoveredClasses() {
     if (!cyRef.current) return
 
+    // TODO: Refactor this
     if (props.configHovered !== prevConfigHovered) {
       setPrevConfigHovered(props.configHovered)
       if (props.configHovered) {
-        cyRef.current
-          .getElementById(props.configHovered.state.data.id)
-          .addClass('dfa__state--config-hover')
+        let config = props.configHovered
+        do {
+          const node = cyRef.current.getElementById(config.state.data.id)
+          node.addClass('dfa__state--config-hover')
+
+          if (config.parent) {
+            const parent = cyRef.current.getElementById(
+              config.parent.state.data.id
+            )
+            parent.edgesTo(node).addClass('dfa__state--config-hover')
+          }
+
+          config = config.parent
+        } while (config)
       } else if (prevConfigHovered) {
-        cyRef.current
-          .getElementById(prevConfigHovered.state.data.id)
-          .removeClass('dfa__state--config-hover')
+        let config = prevConfigHovered
+        do {
+          const node = cyRef.current.getElementById(config.state.data.id)
+          node.removeClass('dfa__state--config-hover')
+
+          if (config.parent) {
+            const parent = cyRef.current.getElementById(
+              config.parent.state.data.id
+            )
+            parent.edgesTo(node).removeClass('dfa__state--config-hover')
+          }
+
+          config = config.parent
+        } while (config)
       }
     }
   }

@@ -35,14 +35,6 @@ export default [
     }
   },
   {
-    selector: 'node.dfa__state--config-hover',
-    style: {
-      'background-color': 'red',
-      'transition-property': 'background-color',
-      'transition-duration': '0.2s'
-    }
-  },
-  {
     selector: 'edge',
     style: {
       label: 'data(label)',
@@ -52,6 +44,23 @@ export default [
       'text-background-color': 'white',
       'text-background-opacity': '1',
       'text-background-shape': 'rectangle'
+    }
+  },
+  {
+    selector: 'node.dfa__state--config-hover',
+    style: {
+      'border-color': '#0d47a1',
+      'border-style': 'dashed',
+      'border-width': 2
+    }
+  },
+  {
+    selector: 'edge.dfa__state--config-hover',
+    style: {
+      'line-color': '#0d47a1',
+      'line-style': 'dashed',
+      'target-arrow-color': '#0d47a1',
+      width: 2
     }
   },
   {
