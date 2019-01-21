@@ -1,11 +1,7 @@
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
 import flatten from 'lodash.flatten'
-import Heading from '../core/Heading'
 import Layout from './Layout'
 import Editor from './Editor'
-import Configurations from './Configurations'
-import MultipleInput from './MultipleInput'
 import Controls from './Controls'
 import { step, resolveConfig } from './helpers'
 import {
@@ -94,45 +90,18 @@ export default function Automata() {
         />
       }
       side={
-        <View style={styles.side}>
-          <Heading style={styles.heading}>WebFLAP</Heading>
-          <Heading style={styles.subheading}>
-            Modern Finite Automaton Maker and Visualizer
-          </Heading>
-          <Controls
-            inputString={inputString}
-            onInputStringChange={onInputStringChange}
-            onPlay={onPlay}
-            onNext={onNext}
-          />
-          <Configurations
-            finalStates={finalStates}
-            rejected={rejectedConfigs}
-            configurations={configs}
-          />
-          <MultipleInput
-            strings={multipleInput}
-            configs={multipleInputConfigs}
-          />
-        </View>
+        <Controls
+          inputString={inputString}
+          onInputStringChange={onInputStringChange}
+          onPlay={onPlay}
+          onNext={onNext}
+          finalStates={finalStates}
+          rejectedConfigs={rejectedConfigs}
+          configs={configs}
+          multipleInput={multipleInput}
+          multipleInputConfigs={multipleInputConfigs}
+        />
       }
     />
   )
 }
-
-const styles = StyleSheet.create({
-  side: {
-    borderRightWidth: 1,
-    borderColor: '#e1e4e8',
-    padding: 20,
-    height: '100%'
-  },
-  heading: {
-    textAlign: 'center'
-  },
-  subheading: {
-    textAlign: 'center',
-    fontSize: 13,
-    paddingBottom: 8
-  }
-})
