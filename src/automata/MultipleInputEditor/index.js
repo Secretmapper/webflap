@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, Button, Text, TextInput, View } from 'react-native'
+import Dropzone from 'react-dropzone'
 import Heading from '../../core/Heading'
 
 export default function MultipleInputEditor(props) {
@@ -11,6 +12,18 @@ export default function MultipleInputEditor(props) {
   }
   const onSaveMultilineInput = e => {
     props.onSaveMultilineInput(multilineInput.split('\n'))
+  }
+  const onDrop = (files, rejectedFiles) => {
+    if (rejectedFiles.length !== 0) {
+      // TODO: Make this look better
+      alert('Please use plain/text (.txt) formats!')
+    }
+
+    const reader = new FileReader()
+    reader.onload = function(e) {
+      props.onSaveMultilineInput(e.target.result.split('\n'))
+    }
+    reader.readAsText(files[0], 'UTF-8')
   }
 
   return (
@@ -32,9 +45,28 @@ export default function MultipleInputEditor(props) {
         <Button title="Save" onPress={onSaveMultilineInput} />
       </View>
       <View style={[styles.column, styles.columnEditor]}>
-        <View style={styles.upload}>
-          <Text style={styles.uploadLabel}>UPLOAD INPUT FILE</Text>
-        </View>
+        <Dropzone accept="text/plain" onDrop={onDrop}>
+          {({ getRootProps, getInputProps, isDragActive }) => (
+            <div
+              {...getRootProps()}
+              style={{
+                ...styles.upload,
+                ...(isDragActive ? styles.uploadDragActive : {})
+              }}
+            >
+              {isDragActive ? (
+                'Drop files here...'
+              ) : (
+                <div>
+                  <div style={styles.uploadLabel}>Drag Input File</div>
+                  <small style={styles.uploadLabel}>or</small>
+                  <div>Click to Browse Input File</div>
+                </div>
+              )}
+              <input {...getInputProps()} />
+            </div>
+          )}
+        </Dropzone>
       </View>
       <View style={styles.or}>
         <Text style={styles.orText}>OR</Text>
@@ -91,19 +123,30 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     lineHeight: 18,
     outline: 'none'
-  },
-  upload: {
-    borderWidth: 2,
-    borderStyle: 'dashed',
-    borderColor: '#e0e0e0',
-    flex: 1,
-    alignContent: 'center',
-    justifyContent: 'center',
-    height: '100%'
-  },
-  uploadLabel: {
-    color: '#909090',
-    fontSize: 24,
-    textAlign: 'center'
   }
 })
+
+styles.upload = {
+  borderWidth: 2,
+  borderStyle: 'dashed',
+  borderColor: '#e0e0e0',
+  cursor: 'pointer',
+  display: 'flex',
+  flex: 1,
+  flexDirection: 'column',
+  alignContent: 'center',
+  justifyContent: 'center',
+  height: '100%',
+
+  color: '#909090',
+  fontSize: 24,
+  textAlign: 'center'
+}
+styles.uploadDragActive = {
+  color: '#2096F3',
+  borderColor: '#2096F3'
+}
+styles.uploadLabel = {
+  display: 'block',
+  paddingBottom: 8
+}
