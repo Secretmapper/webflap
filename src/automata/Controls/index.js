@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Button, View } from 'react-native'
+import { StyleSheet, Button, Picker, View } from 'react-native'
 import Modal from 'modal-enhanced-react-native-web'
 import Heading from '../../core/Heading'
 import Configurations from '../Configurations'
@@ -21,6 +21,9 @@ export default function Controls(props) {
     rejectedConfigs,
     configs,
     onConfigHover,
+
+    layout,
+    setLayout,
 
     multipleInput,
     multipleInputConfigs
@@ -60,6 +63,14 @@ export default function Controls(props) {
             title="Run Multiple"
             onPress={() => setTab('multipleRun')}
           />
+          <Picker selectedValue={layout} onValueChange={setLayout}>
+            <Picker.Item label="Random" value="random" />
+            <Picker.Item label="Grid" value="grid" />
+            <Picker.Item label="Circle" value="circle" />
+            <Picker.Item label="Concentric" value="concentric" />
+            <Picker.Item label="Breadthfirst" value="breadthfirst" />
+            <Picker.Item label="Cose" value="cose" />
+          </Picker>
         </React.Fragment>
       )}
       {tab === 'multipleRun' && (

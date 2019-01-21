@@ -6,6 +6,7 @@ import cyStylesheet from './stylesheet'
 export function AutomataEditor(props) {
   const cyRef = useRef(null)
   const inputEl = useRef(null)
+  const [prevLayout, setPrevLayout] = useState(undefined)
   const [prevStepping, setPrevStepping] = useState(props.stepping)
   const [prevConfigHovered, setPrevConfigHovered] = useState(
     props.configHovered
@@ -103,6 +104,13 @@ export function AutomataEditor(props) {
   updateSteppingClasses()
   updateConfigHoveredClasses()
 
+  if (props.layout !== prevLayout) {
+    setPrevLayout(props.layout)
+    if (cyRef.current) {
+      cyRef.current.layout({ name: props.layout }).run()
+    }
+  }
+
   const onNodeLabelInputBlur = e => {
     const cy = cyRef.current
 
@@ -122,6 +130,7 @@ export function AutomataEditor(props) {
     <View style={styles.container}>
       <UncontrolledCytoscape
         cy={setCy}
+        layout={props.layout ? { name: props.layout } : null}
         elements={props.elements}
         stylesheet={cyStylesheet}
         style={{ height: '400px', width: '600px' }}

@@ -40,6 +40,7 @@ const initialConfig = (input = 'bc') => ({
 
 export default function Automata() {
   const [configs, setConfigs] = useState([initialConfig()])
+  const [layout, setLayout] = useState(undefined)
   const [configBeingHovered, setConfigBeingHovered] = useState(null)
   const [multipleInput, setMultipleInput] = useState([
     'b',
@@ -100,6 +101,7 @@ export default function Automata() {
     <Layout
       main={
         <Editor
+          layout={layout}
           elements={elements}
           transitions={transitions}
           stepping={configs}
@@ -116,6 +118,8 @@ export default function Automata() {
           rejectedConfigs={rejectedConfigs}
           configs={configs}
           onConfigHover={onConfigHover}
+          layout={layout}
+          setLayout={setLayout}
           multipleInput={multipleInput}
           setMultipleInput={onSetMultipleInput}
           multipleInputConfigs={multipleInputConfigs}
