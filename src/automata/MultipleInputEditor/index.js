@@ -17,7 +17,7 @@ export default function MultipleInputEditor(props) {
     <View style={styles.container}>
       <View style={styles.column}>
         <Heading style={styles.heading}>
-          Editor
+          Edit Test Input
           <Text style={styles.headingSmall}>
             (separate test input by newline)
           </Text>
@@ -33,8 +33,11 @@ export default function MultipleInputEditor(props) {
       </View>
       <View style={[styles.column, styles.columnEditor]}>
         <View style={styles.upload}>
-          <Text style={styles.uploadLabel}>Upload</Text>
+          <Text style={styles.uploadLabel}>UPLOAD INPUT FILE</Text>
         </View>
+      </View>
+      <View style={styles.or}>
+        <Text style={styles.orText}>OR</Text>
       </View>
     </View>
   )
@@ -42,10 +45,27 @@ export default function MultipleInputEditor(props) {
 
 const styles = StyleSheet.create({
   container: {
+    position: 'relative',
     flex: 1,
     flexDirection: 'row',
     height: '100%',
     width: '100%'
+  },
+  or: {
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    transform: [{ translateX: '-50%' }, { translateY: '-50%' }],
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 50,
+    boxShadow: '0 0 16px rgba(0, 0, 0, 0.3)',
+    height: 60,
+    width: 60
+  },
+  orText: {
+    fontSize: 24
   },
   column: {
     padding: 22,
@@ -82,6 +102,8 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   uploadLabel: {
+    color: '#909090',
+    fontSize: 24,
     textAlign: 'center'
   }
 })
