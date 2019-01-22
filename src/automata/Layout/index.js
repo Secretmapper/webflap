@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flexDirection: 'column',
-    height: '100%'
+    flex: 1
   },
   side: {
     flexDirection: 'column',

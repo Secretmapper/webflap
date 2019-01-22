@@ -133,7 +133,7 @@ export function AutomataEditor(props) {
         layout={props.layout ? { name: props.layout } : null}
         elements={props.elements}
         stylesheet={cyStylesheet}
-        style={{ height: '400px', width: '600px' }}
+        style={{ height: '100%', width: '100%' }}
       />
       {editing && (
         <TextInput
@@ -218,7 +218,8 @@ class UncontrolledCytoscape extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fefefe'
+    backgroundColor: '#fefefe',
+    width: '100%'
   },
   labelInput: {
     fontSize: 14,
