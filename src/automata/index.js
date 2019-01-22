@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import flatten from 'lodash.flatten'
 import Layout from './Layout'
 import Editor from './Editor'
@@ -39,6 +39,11 @@ const initialConfig = (input = 'bc') => ({
 })
 
 export default function Automata() {
+  const cyRef = useRef(null)
+  const setCy = cy => {
+    cyRef.current = cy
+  }
+
   const [configs, setConfigs] = useState([initialConfig()])
   const [layout, setLayout] = useState(undefined)
   const [configBeingHovered, setConfigBeingHovered] = useState(null)
@@ -96,11 +101,29 @@ export default function Automata() {
     setConfigs(flatten(newConfigs))
     setRejectedConfigs(newRejectedConfigs)
   }
+  const saveAsImage = type => {
+    let image
+
+    if (type === 'image/jpeg') {
+      image = cyRef.current.jpeg()
+    } else if (type === 'image/png') {
+      image = cyRef.current.png()
+    }
+
+    if (image) {
+      const url = image.replace(
+        /^data:image\/[^;]+/,
+        'data:application/octet-stream'
+      )
+      window.open(url)
+    }
+  }
 
   return (
     <Layout
       main={
         <Editor
+          cy={setCy}
           layout={layout}
           elements={elements}
           transitions={transitions}
@@ -120,6 +143,7 @@ export default function Automata() {
           onConfigHover={onConfigHover}
           layout={layout}
           setLayout={setLayout}
+          saveAsImage={saveAsImage}
           multipleInput={multipleInput}
           setMultipleInput={onSetMultipleInput}
           multipleInputConfigs={multipleInputConfigs}

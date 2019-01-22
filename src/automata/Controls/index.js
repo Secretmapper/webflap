@@ -25,6 +25,8 @@ export default function Controls(props) {
     layout,
     setLayout,
 
+    saveAsImage,
+
     multipleInput,
     multipleInputConfigs
   } = props
@@ -64,6 +66,10 @@ export default function Controls(props) {
               title="Run Multiple"
               onPress={() => setTab('multipleRun')}
             />
+            <NavButton
+              title="Save as Image"
+              onPress={() => setTab('saveAsImage')}
+            />
             <Picker selectedValue={layout} onValueChange={setLayout}>
               <Picker.Item label="Random" value="random" />
               <Picker.Item label="Grid" value="grid" />
@@ -81,6 +87,18 @@ export default function Controls(props) {
               strings={multipleInput}
               configs={multipleInputConfigs}
               onConfigHover={onConfigHover}
+            />
+          </React.Fragment>
+        )}
+        {tab === 'saveAsImage' && (
+          <React.Fragment>
+            <NavButton
+              title="Save as PNG"
+              onPress={() => saveAsImage('image/png')}
+            />
+            <NavButton
+              title="Save as JPEG"
+              onPress={() => saveAsImage('image/jpeg')}
             />
           </React.Fragment>
         )}

@@ -40,6 +40,7 @@ export function AutomataEditor(props) {
 
   const setCy = internal => {
     cyRef.current = internal
+    props.cy(internal)
 
     const cy = cyRef.current
     cy.edgehandles({
