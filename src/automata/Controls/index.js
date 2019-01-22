@@ -36,68 +36,73 @@ export default function Controls(props) {
 
   return (
     <View style={styles.side}>
-      <Modal
-        style={styles.modal}
-        transparent={true}
-        isVisible={showModal}
-        onBackdropPress={() => setShowModal(false)}
-      >
-        {showModal && (
-          <MultipleInputEditor
-            currMultipleInput={props.multipleInput}
-            onSaveMultilineInput={onSaveMultilineInput}
-          />
+      <View style={styles.main}>
+        <Modal
+          style={styles.modal}
+          transparent={true}
+          isVisible={showModal}
+          onBackdropPress={() => setShowModal(false)}
+        >
+          {showModal && (
+            <MultipleInputEditor
+              currMultipleInput={props.multipleInput}
+              onSaveMultilineInput={onSaveMultilineInput}
+            />
+          )}
+        </Modal>
+        <Heading style={styles.heading}>WebFLAP</Heading>
+        <Heading style={styles.subheading}>
+          Modern Finite Automaton Maker and Visualizer
+        </Heading>
+        {tab === null && (
+          <React.Fragment>
+            <NavButton
+              title="Step by Step"
+              onPress={() => setTab('stepByStep')}
+            />
+            <NavButton
+              title="Run Multiple"
+              onPress={() => setTab('multipleRun')}
+            />
+            <Picker selectedValue={layout} onValueChange={setLayout}>
+              <Picker.Item label="Random" value="random" />
+              <Picker.Item label="Grid" value="grid" />
+              <Picker.Item label="Circle" value="circle" />
+              <Picker.Item label="Concentric" value="concentric" />
+              <Picker.Item label="Breadthfirst" value="breadthfirst" />
+              <Picker.Item label="Cose" value="cose" />
+            </Picker>
+          </React.Fragment>
         )}
-      </Modal>
-      <Heading style={styles.heading}>WebFLAP</Heading>
-      <Heading style={styles.subheading}>
-        Modern Finite Automaton Maker and Visualizer
-      </Heading>
-      {tab === null && (
-        <React.Fragment>
-          <NavButton
-            title="Step by Step"
-            onPress={() => setTab('stepByStep')}
-          />
-          <NavButton
-            title="Run Multiple"
-            onPress={() => setTab('multipleRun')}
-          />
-          <Picker selectedValue={layout} onValueChange={setLayout}>
-            <Picker.Item label="Random" value="random" />
-            <Picker.Item label="Grid" value="grid" />
-            <Picker.Item label="Circle" value="circle" />
-            <Picker.Item label="Concentric" value="concentric" />
-            <Picker.Item label="Breadthfirst" value="breadthfirst" />
-            <Picker.Item label="Cose" value="cose" />
-          </Picker>
-        </React.Fragment>
-      )}
-      {tab === 'multipleRun' && (
-        <React.Fragment>
-          <NavButton title="Load Inputs" onPress={() => setShowModal(true)} />
-          <MultipleInput
-            strings={multipleInput}
-            configs={multipleInputConfigs}
-            onConfigHover={onConfigHover}
-          />
-        </React.Fragment>
-      )}
-      {tab === 'stepByStep' && (
-        <React.Fragment>
-          <StepByStepControls
-            inputString={inputString}
-            onInputStringChange={onInputStringChange}
-            onPlay={onPlay}
-            onNext={onNext}
-          />
-          <Configurations
-            finalStates={finalStates}
-            rejected={rejectedConfigs}
-            configurations={configs}
-            onConfigHover={onConfigHover}
-          />
-        </React.Fragment>
+        {tab === 'multipleRun' && (
+          <React.Fragment>
+            <NavButton title="Load Inputs" onPress={() => setShowModal(true)} />
+            <MultipleInput
+              strings={multipleInput}
+              configs={multipleInputConfigs}
+              onConfigHover={onConfigHover}
+            />
+          </React.Fragment>
+        )}
+        {tab === 'stepByStep' && (
+          <React.Fragment>
+            <StepByStepControls
+              inputString={inputString}
+              onInputStringChange={onInputStringChange}
+              onPlay={onPlay}
+              onNext={onNext}
+            />
+            <Configurations
+              finalStates={finalStates}
+              rejected={rejectedConfigs}
+              configurations={configs}
+              onConfigHover={onConfigHover}
+            />
+          </React.Fragment>
+        )}
+      </View>
+      {tab !== null && (
+        <NavButton color="#9e9e9e" title="Back" onPress={() => setTab(null)} />
       )}
     </View>
   )
@@ -117,6 +122,9 @@ const styles = StyleSheet.create({
     borderColor: '#e1e4e8',
     padding: 20,
     height: '100%'
+  },
+  main: {
+    flex: 1
   },
   modal: {
     alignItems: 'center',
