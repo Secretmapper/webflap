@@ -54,7 +54,7 @@ export function AutomataEditor(props) {
     const onSurfaceClick = evt => {
       const target = evt.target || evt.cyTarget
       if (target === cy) {
-        cy.add({
+        const node = cy.add({
           data: {
             // TODO: Add actual uuid generation
             id: 'new' + Math.round(Math.random() * 100),
@@ -66,6 +66,7 @@ export function AutomataEditor(props) {
           },
           classes: ['dfa__state']
         })
+        onNodeEdit({ target: node })
       }
     }
     const onNodeEdit = e => {
@@ -84,7 +85,8 @@ export function AutomataEditor(props) {
         source: { data: sourceNode.data() },
         target: { data: targetNode.data() }
       })
-      addedEles.addClass('autorotate')
+
+      onEdgeEdit({ target: addedEles.first() })
     }
     const onEdgeEdit = e => {
       const edge = e.target
