@@ -36,6 +36,12 @@ export default function Controls(props) {
     props.setMultipleInput(value)
   }
 
+  const onInputPress = value => {
+    // XXX: don't simulate an event here
+    onInputStringChange({ target: { value } })
+    setTab('stepByStep')
+  }
+
   return (
     <View style={styles.side}>
       <View style={styles.main}>
@@ -87,6 +93,7 @@ export default function Controls(props) {
               strings={multipleInput}
               configs={multipleInputConfigs}
               onConfigHover={onConfigHover}
+              onInputPress={onInputPress}
             />
           </React.Fragment>
         )}

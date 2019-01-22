@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { StyleSheet, TouchableOpacity, View, Text } from 'react-native'
 import useHover from '../../core/hooks/useHover'
 
 export default function MultipleInput(props) {
@@ -11,6 +11,7 @@ export default function MultipleInput(props) {
           string={string}
           config={props.configs[i]}
           onHover={props.onConfigHover}
+          onInputPress={props.onInputPress}
         />
       ))}
     </View>
@@ -24,21 +25,32 @@ function Row(props) {
     setIsHovered(hovering)
     props.onHover(props.config, hovering)
   })
+  useEffect(
+    () => {
+      return () => {
+        props.onHover(props.config, false)
+      }
+    },
+    ['once']
+  )
+
   const accepted = !!props.config
 
   return (
-    <View
-      ref={touchableRef}
-      style={[
-        styles.row,
-        accepted && styles.rowAccepted,
-        !accepted && styles.rowRejected,
-        accepted && isHovered && styles.rowHoveredAccepted,
-        !accepted && isHovered && styles.rowHoveredRejected
-      ]}
-    >
-      <Text>{props.string}</Text>
-    </View>
+    <TouchableOpacity onPress={() => props.onInputPress(props.string)}>
+      <View
+        ref={touchableRef}
+        style={[
+          styles.row,
+          accepted && styles.rowAccepted,
+          !accepted && styles.rowRejected,
+          accepted && isHovered && styles.rowHoveredAccepted,
+          !accepted && isHovered && styles.rowHoveredRejected
+        ]}
+      >
+        <Text>{props.string}</Text>
+      </View>
+    </TouchableOpacity>
   )
 }
 
