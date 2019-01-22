@@ -82,6 +82,7 @@ export default function Automata() {
   }
   const onPlay = () => {
     setConfigs([initialConfig(inputString)])
+    setRejectedConfigs([])
   }
   const onNext = () => {
     const newConfigs = []
