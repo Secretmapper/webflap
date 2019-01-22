@@ -44,6 +44,10 @@ export default function Controls(props) {
 
   return (
     <View style={styles.side}>
+      <Heading style={styles.heading}>WebFLAP</Heading>
+      <Heading style={styles.subheading}>
+        Modern Finite Automaton Maker and Visualizer
+      </Heading>
       <View style={styles.main}>
         <Modal
           style={styles.modal}
@@ -58,10 +62,6 @@ export default function Controls(props) {
             />
           )}
         </Modal>
-        <Heading style={styles.heading}>WebFLAP</Heading>
-        <Heading style={styles.subheading}>
-          Modern Finite Automaton Maker and Visualizer
-        </Heading>
         {tab === null && (
           <React.Fragment>
             <NavButton
@@ -149,6 +149,8 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   main: {
+    overflow: 'scroll',
+    marginBottom: 8,
     flex: 1
   },
   modal: {
