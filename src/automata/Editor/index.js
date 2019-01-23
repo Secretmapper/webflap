@@ -48,6 +48,9 @@ export function AutomataEditor(props) {
       edgeType: function(sourceNode, targetNode) {
         return sourceNode.edgesTo(targetNode).empty() ? 'flat' : null
       },
+      loopAllowed: function() {
+        return true
+      },
       complete: onEdgeCreate
     })
 
