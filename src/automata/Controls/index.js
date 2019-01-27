@@ -6,6 +6,7 @@ import Configurations from '../Configurations'
 import MultipleInput from '../MultipleInput'
 import MultipleInputEditor from '../MultipleInputEditor'
 import StepByStepControls from '../StepByStepControls'
+import Links from './Links'
 
 export default function Controls(props) {
   const [tab, setTab] = useState(null)
@@ -129,6 +130,7 @@ export default function Controls(props) {
       {tab !== null && (
         <NavButton color="#9e9e9e" title="Back" onPress={() => setTab(null)} />
       )}
+      <Links />
     </View>
   )
 }
@@ -169,6 +171,32 @@ const styles = StyleSheet.create({
     fontSize: 13,
     paddingTop: 4,
     paddingBottom: 8
+  },
+  linkContainer: {
+    borderTopColor: 'rgba(0, 0, 0, 0.05)',
+    borderTopWidth: 1
+  },
+  linkBottom: {
+    borderBottomColor: 'rgba(0, 0, 0, 0.05)',
+    borderBottomWidth: 1
+  },
+  link: {
+    display: 'block',
+    paddingBottom: 8,
+    paddingTop: 8,
+    paddingLeft: 15,
+    paddingRight: 15,
+    marginLeft: '-15px',
+    marginRight: '-15px',
+    color: '#818387',
+    borderRadius: 3
+  },
+  authorLinkContainer: {
+    paddingBottom: 10,
+    paddingTop: 10
+  },
+  authorLink: {
+    color: '#71BCF7'
   },
   navLink: {
     paddingBottom: 4,
