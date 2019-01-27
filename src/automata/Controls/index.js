@@ -130,7 +130,7 @@ export default function Controls(props) {
       {tab !== null && (
         <NavButton color="#9e9e9e" title="Back" onPress={() => setTab(null)} />
       )}
-      <Links />
+      <Links openModal={props.openModal} />
     </View>
   )
 }

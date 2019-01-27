@@ -2,7 +2,10 @@ import React, { useRef } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import useHover from '../../../core/hooks/useHover'
 
-function Links() {
+function Links(props) {
+  const howToUseRef = useRef(null)
+  const howToUseHover = useHover(howToUseRef)
+
   const sourceCodeRef = useRef(null)
   const sourceCodeHover = useHover(sourceCodeRef)
 
@@ -11,6 +14,14 @@ function Links() {
 
   return (
     <View>
+      <View ref={howToUseRef} style={styles.linkContainer}>
+        <Text
+          style={[styles.link, howToUseHover && styles.linkHover]}
+          onPress={props.openModal}
+        >
+          How to use
+        </Text>
+      </View>
       <View ref={sourceCodeRef} style={styles.linkContainer}>
         <Text
           style={[styles.link, sourceCodeHover && styles.linkHover]}
@@ -74,7 +85,8 @@ const styles = StyleSheet.create({
   },
   linkHover: {
     backgroundColor: 'rgba(0, 0, 0, 0.03)',
-    color: 'black'
+    color: 'black',
+    cursor: 'pointer'
   },
   authorLinkContainer: {
     paddingBottom: 10,

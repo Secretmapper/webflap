@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react'
 import flatten from 'lodash.flatten'
 import Layout from './Layout'
 import Editor from './Editor'
+import ZoomedModal from './ZoomedModal'
+import Instructions from './Instructions'
 import Controls from './Controls'
 import { step, resolveConfig } from './helpers'
 import {
@@ -44,6 +46,7 @@ export default function Automata() {
     cyRef.current = cy
   }
 
+  const [showModal, setShowModal] = useState(true)
   const [configs, setConfigs] = useState([initialConfig()])
   const [layout, setLayout] = useState(undefined)
   const [configBeingHovered, setConfigBeingHovered] = useState(null)
@@ -123,13 +126,19 @@ export default function Automata() {
   return (
     <Layout
       main={
-        <Editor
-          cy={setCy}
-          layout={layout}
-          elements={elements}
-          transitions={transitions}
-          stepping={configs}
-          configHovered={configBeingHovered}
+        <ZoomedModal
+          main={
+            <Editor
+              cy={setCy}
+              layout={layout}
+              elements={elements}
+              transitions={transitions}
+              stepping={configs}
+              configHovered={configBeingHovered}
+            />
+          }
+          modal={<Instructions onClose={() => setShowModal(false)} />}
+          showModal={showModal}
         />
       }
       side={
@@ -148,6 +157,7 @@ export default function Automata() {
           multipleInput={multipleInput}
           setMultipleInput={onSetMultipleInput}
           multipleInputConfigs={multipleInputConfigs}
+          openModal={() => setShowModal(true)}
         />
       }
     />
