@@ -42,11 +42,8 @@ const initialConfig = (input = 'bc') => ({
 
 export default function Automata() {
   const cyRef = useRef(null)
-  const setCy = cy => {
-    cyRef.current = cy
-  }
 
-  const [showModal, setShowModal] = useState(true)
+  const [showModal, setShowModal] = useState(false)
   const [configs, setConfigs] = useState([initialConfig()])
   const [layout, setLayout] = useState(undefined)
   const [configBeingHovered, setConfigBeingHovered] = useState(null)
@@ -65,6 +62,10 @@ export default function Automata() {
   const [rejectedConfigs, setRejectedConfigs] = useState([])
   const [inputString, setInputString] = useState('bc')
 
+  const setCy = cy => {
+    cyRef.current = cy
+    setShowModal(true)
+  }
   const onSetMultipleInput = value => {
     setMultipleInput(value)
     setMultipleInputConfigs(

@@ -5,7 +5,7 @@ import { Spring } from 'react-spring'
 export function ZoomedModal(props) {
   return (
     <View style={styles.container}>
-      <Spring from={{ scale: 0.9 }} to={{ scale: props.showModal ? 0.9 : 1 }}>
+      <Spring from={{ scale: 1.0 }} to={{ scale: props.showModal ? 0.9 : 1 }}>
         {tStyles => (
           <View
             style={[{ transform: [{ scale: tStyles.scale }] }, styles.main]}
