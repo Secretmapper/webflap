@@ -76,9 +76,15 @@ export function AutomataEditor(props) {
       const node = e.target
       const { x, y } = node.renderedPosition()
 
-      node.data('label', '')
-      setEditing({ x, y, id: node.id(), type: 'node' })
+      setEditing({
+        x,
+        y,
+        id: node.id(),
+        value: node.data('label'),
+        type: 'node'
+      })
       inputEl.current.focus()
+      node.data('label', '')
     }
     function onEdgeCreate(sourceNode, targetNode, addedEles) {
       // TODO: Have all these data handled in one place
@@ -95,9 +101,15 @@ export function AutomataEditor(props) {
       const edge = e.target
       const { x, y } = edge.renderedMidpoint()
 
-      edge.data('label', '')
-      setEditing({ x, y, id: edge.id(), type: 'edge' })
+      setEditing({
+        x,
+        y,
+        id: edge.id(),
+        value: edge.data('label'),
+        type: 'edge'
+      })
       inputEl.current.focus()
+      edge.data('label', '')
     }
 
     cy.on('tap', onSurfaceClick)
@@ -117,6 +129,9 @@ export function AutomataEditor(props) {
     }
   }
 
+  const onEditingValueChange = e => {
+    setEditing({ ...editing, value: e.target.value })
+  }
   const onNodeLabelInputBlur = e => {
     const cy = cyRef.current
 
@@ -143,8 +158,11 @@ export function AutomataEditor(props) {
       />
       {editing && (
         <TextInput
+          selectTextOnFocus
           ref={inputEl}
           style={[styles.labelInput, { left: editing.x, top: editing.y }]}
+          value={editing.value}
+          onChange={onEditingValueChange}
           onBlur={onNodeLabelInputBlur}
         />
       )}
