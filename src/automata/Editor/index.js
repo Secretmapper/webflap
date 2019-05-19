@@ -16,6 +16,87 @@ export function AutomataEditor(props) {
   useEffect(
     () => {
       const cy = cyRef.current
+
+      const onNodeEdit = e => {
+        const node = e.target
+        const { x, y } = node.renderedPosition()
+
+        setEditing({
+          x,
+          y,
+          id: node.id(),
+          value: node.data('label'),
+          type: 'node'
+        })
+        inputEl.current.focus()
+        node.data('label', '')
+      }
+
+      const onNodeDelete = e => {
+        const node = e.target
+        node.remove()
+      }
+
+      const onSurfaceClick = evt => {
+        const target = evt.target || evt.cyTarget
+        if (target === cy) {
+          const node = cy.add({
+            data: {
+              // TODO: Add actual uuid generation
+              id: 'new' + Math.round(Math.random() * 100),
+              label: ''
+            },
+            position: {
+              x: evt.position.x,
+              y: evt.position.y
+            },
+            classes: ['dfa__state']
+          })
+          onNodeEdit({ target: node })
+        }
+      }
+
+      const cxtMenuOpts = {
+        menuRadius: 80,
+        selector: 'node',
+        commands: [
+          {
+            fillColor: 'rgba(200, 200, 200, 0.75)',
+            content: 'edit',
+            contentStyle: {},
+            select: function(ele) {
+              onNodeEdit({ target: ele })
+            },
+            enabled: true
+          },
+          {
+            fillColor: 'rgba(200, 200, 200, 0.75)',
+            content: 'delete',
+            contentStyle: {},
+            select: function(ele) {
+              onNodeDelete({ target: ele })
+            },
+            enabled: true
+          }
+        ],
+        fillColor: 'rgba(0, 0, 0, 0.75)',
+        activeFillColor: 'rgba(1, 105, 217, 0.75)',
+        activePadding: 10,
+        indicatorSize: 12,
+        separatorWidth: 3,
+        spotlightPadding: 4,
+        minSpotlightRadius: 24,
+        maxSpotlightRadius: 38,
+        openMenuEvents: 'cxttapstart taphold',
+        itemColor: 'white',
+        itemTextShadowColor: 'transparent',
+        zIndex: 9999,
+        atMouse: false
+      }
+
+      cy.on('tap', onSurfaceClick)
+      cy.cxtmenu(cxtMenuOpts)
+
       let raf
       let animOffset = 0
 
@@ -54,38 +135,6 @@ export function AutomataEditor(props) {
       complete: onEdgeCreate
     })
 
-    const onSurfaceClick = evt => {
-      const target = evt.target || evt.cyTarget
-      if (target === cy) {
-        const node = cy.add({
-          data: {
-            // TODO: Add actual uuid generation
-            id: 'new' + Math.round(Math.random() * 100),
-            label: ''
-          },
-          position: {
-            x: evt.position.x,
-            y: evt.position.y
-          },
-          classes: ['dfa__state']
-        })
-        onNodeEdit({ target: node })
-      }
-    }
-    const onNodeEdit = e => {
-      const node = e.target
-      const { x, y } = node.renderedPosition()
-
-      setEditing({
-        x,
-        y,
-        id: node.id(),
-        value: node.data('label'),
-        type: 'node'
-      })
-      inputEl.current.focus()
-      node.data('label', '')
-    }
     function onEdgeCreate(sourceNode, targetNode, addedEles) {
       // TODO: Have all these data handled in one place
       props.transitions.set(addedEles.id(), {
@@ -112,8 +161,7 @@ export function AutomataEditor(props) {
       edge.data('label', '')
     }
 
-    cy.on('tap', onSurfaceClick)
-    cy.on('taphold', 'node.dfa__state', onNodeEdit)
+    // cy.on('taphold', 'node.dfa__state', onNodeEdit)
     cy.on('taphold', 'edge', onEdgeEdit)
     updateSteppingClasses()
     updateConfigHoveredClasses()

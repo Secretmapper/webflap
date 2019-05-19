@@ -6,8 +6,10 @@ import 'typeface-montserrat'
 
 import Cytoscape from 'cytoscape'
 import edgehandles from 'cytoscape-edgehandles'
+import cxtmenu from 'cytoscape-cxtmenu'
 
 Cytoscape.use(edgehandles)
+Cytoscape.use(cxtmenu)
 
 // register the app
 AppRegistry.registerComponent('App', () => App)
