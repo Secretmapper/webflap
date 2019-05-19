@@ -7,7 +7,7 @@ import Instructions from './Instructions'
 import Controls from './Controls'
 import { step, resolveConfig } from './helpers'
 import {
-  initialState,
+  initialState as initialStateFixture,
   finalStates,
   states,
   transitions
@@ -18,7 +18,7 @@ const elements = [
     ...state,
     classes: [
       'dfa__state',
-      initialState === state.data.id ? 'dfa__state--initial' : '',
+      initialStateFixture === state.data.id ? 'dfa__state--initial' : '',
       finalStates.has(state.data.id) ? 'dfa__state--final' : ''
     ]
   })),
@@ -33,9 +33,10 @@ const elements = [
   }))
 ]
 
-const initialConfig = (input = 'bc') => ({
+const initialConfig = (initialState, input = 'bc') => ({
   hash: '' + Math.random(),
-  state: states.get(initialState),
+  // TODO: Type this
+  state: { data: { id: initialState } },
   input,
   unprocessed: input
 })
@@ -44,7 +45,8 @@ export default function Automata() {
   const cyRef = useRef(null)
 
   const [showModal, setShowModal] = useState(false)
-  const [configs, setConfigs] = useState([initialConfig()])
+  const [initialState, setInitialState] = useState(initialStateFixture)
+  const [configs, setConfigs] = useState([initialConfig(initialState)])
   const [layout, setLayout] = useState(undefined)
   const [configBeingHovered, setConfigBeingHovered] = useState(null)
   const [multipleInput, setMultipleInput] = useState([
@@ -56,7 +58,11 @@ export default function Automata() {
   ])
   const [multipleInputConfigs, setMultipleInputConfigs] = useState(
     multipleInput.map(input =>
-      resolveConfig(transitions, initialConfig(input), finalStates)
+      resolveConfig(
+        transitions,
+        initialConfig(initialState, input),
+        finalStates
+      )
     )
   )
   const [rejectedConfigs, setRejectedConfigs] = useState([])
@@ -70,7 +76,11 @@ export default function Automata() {
     setMultipleInput(value)
     setMultipleInputConfigs(
       value.map(input =>
-        resolveConfig(transitions, initialConfig(input), finalStates)
+        resolveConfig(
+          transitions,
+          initialConfig(initialState, input),
+          finalStates
+        )
       )
     )
   }
@@ -85,7 +95,7 @@ export default function Automata() {
     setInputString(e.target.value)
   }
   const onPlay = () => {
-    setConfigs([initialConfig(inputString)])
+    setConfigs([initialConfig(initialState, inputString)])
     setRejectedConfigs([])
   }
   const onNext = () => {
@@ -135,6 +145,7 @@ export default function Automata() {
               elements={elements}
               finalStates={finalStates}
               initialState={initialState}
+              setInitialState={setInitialState}
               transitions={transitions}
               stepping={configs}
               configHovered={configBeingHovered}
