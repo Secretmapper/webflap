@@ -22,7 +22,11 @@ export function AutomataEditor(props) {
       const cy = cyRef.current
       const ur = cy.undoRedo({ stackSizeLimit: 15 })
 
-      ur.do('setAsFinal', e.target)
+      if (props.finalStates.has(e.target.data().id)) {
+        ur.do('unsetAsFinal', e.target)
+      } else {
+        ur.do('setAsFinal', e.target)
+      }
     },
     [cyRef]
   )
@@ -35,11 +39,22 @@ export function AutomataEditor(props) {
         'setAsFinal',
         eles => {
           props.finalStates.add(eles.data().id)
-          // props.finalStates
           return eles.addClass('dfa__state--final')
         },
         eles => {
+          props.finalStates.delete(eles.data().id)
           return eles.removeClass('dfa__state--final')
+        }
+      )
+      ur.action(
+        'unsetAsFinal',
+        eles => {
+          props.finalStates.delete(eles.data().id)
+          return eles.removeClass('dfa__state--final')
+        },
+        eles => {
+          props.finalStates.add(eles.data().id)
+          return eles.addClass('dfa__state--final')
         }
       )
 
@@ -89,12 +104,12 @@ export function AutomataEditor(props) {
       }
 
       const cxtMenuOpts = {
-        menuRadius: 80,
+        menuRadius: 100,
         selector: 'node',
         commands: [
           {
             fillColor: 'rgba(200, 200, 200, 0.75)',
-            content: 'Set as Initial',
+            content: 'Set/Unset as Initial',
             contentStyle: {},
             select: function(ele) {
               setNodeAsStart({ target: ele })
@@ -103,7 +118,7 @@ export function AutomataEditor(props) {
           },
           {
             fillColor: 'rgba(200, 200, 200, 0.75)',
-            content: 'Set as Final',
+            content: 'Set/Unset as Final',
             contentStyle: {},
             select: function(ele) {
               setNodeAsFinal({ target: ele })
@@ -132,7 +147,7 @@ export function AutomataEditor(props) {
         fillColor: 'rgba(0, 0, 0, 0.75)',
         activeFillColor: 'rgba(1, 105, 217, 0.75)',
         activePadding: 10,
-        indicatorSize: 12,
+        indicatorSize: 24,
         separatorWidth: 3,
         spotlightPadding: 4,
         minSpotlightRadius: 24,
