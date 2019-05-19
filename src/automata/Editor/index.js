@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
-import { StyleSheet, TextInput, Picker, View } from 'react-native'
+import { StyleSheet, Button, TextInput, Picker, View } from 'react-native'
 import { useDebouncedCallback } from 'use-debounce'
 import Cytoscape from 'react-cytoscapejs'
 import cyStylesheet from './stylesheet'
@@ -252,9 +252,6 @@ export function AutomataEditor(props) {
     const cy = cyRef.current
     cy.edgehandles({
       preview: false,
-      edgeType: function(sourceNode, targetNode) {
-        return sourceNode.edgesTo(targetNode).empty() ? 'flat' : null
-      },
       loopAllowed: function() {
         return true
       },
@@ -352,6 +349,15 @@ export function AutomataEditor(props) {
       }
     }, 0)
   }
+  const onRemoveTransition = useCallback(
+    e => {
+      cyRef.current.remove(`#${editing.id}`)
+      props.transitions.delete(editing.id)
+      props.setTransitions()
+      setEditing(null)
+    },
+    [cyRef.current, editing]
+  )
 
   return (
     <View style={styles.container}>
@@ -369,36 +375,43 @@ export function AutomataEditor(props) {
             { left: editing.x, top: editing.y }
           ]}
         >
-          {editing.type !== 'node' && (
+          <View style={styles.labelInputRow}>
+            {editing.type !== 'node' && (
+              <TextInput
+                selectTextOnFocus
+                ref={inputElLeft}
+                style={[styles.labelInput, styles.labelInputText]}
+                value={editing.valueLeft || ''}
+                placeholder={BLANK_CODE}
+                onChange={onEditingLeftValueChange}
+                onBlur={onNodeLabelInputBlur}
+              />
+            )}
             <TextInput
               selectTextOnFocus
-              ref={inputElLeft}
+              ref={inputEl}
               style={[styles.labelInput, styles.labelInputText]}
-              value={editing.valueLeft || ''}
-              placeholder={BLANK_CODE}
-              onChange={onEditingLeftValueChange}
+              value={editing.value || ''}
+              onChange={onEditingValueChange}
               onBlur={onNodeLabelInputBlur}
             />
-          )}
-          <TextInput
-            selectTextOnFocus
-            ref={inputEl}
-            style={[styles.labelInput, styles.labelInputText]}
-            value={editing.value || ''}
-            onChange={onEditingValueChange}
-            onBlur={onNodeLabelInputBlur}
-          />
-          {editing.type !== 'node' && (
-            <Picker
-              ref={inputElRight}
-              selectedValue={editing.valueRight || 'L'}
-              onValueChange={onTMDirectionChange}
-              style={styles.labelInput}
-            >
-              <Picker.Item label="L" value="L" />
-              <Picker.Item label="R" value="R" />
-            </Picker>
-          )}
+            {editing.type !== 'node' && (
+              <Picker
+                ref={inputElRight}
+                selectedValue={editing.valueRight || 'L'}
+                onValueChange={onTMDirectionChange}
+                style={styles.labelInput}
+              >
+                <Picker.Item label="L" value="L" />
+                <Picker.Item label="R" value="R" />
+              </Picker>
+            )}
+            <Button
+              style={styles.labelInputAction}
+              title="Remove"
+              onPress={onRemoveTransition}
+            />
+          </View>
         </View>
       )}
     </View>
@@ -482,8 +495,17 @@ const styles = StyleSheet.create({
   },
   labelInputContainer: {
     position: 'absolute',
-    flexDirection: 'row',
     transform: [{ translateX: '-50%' }, { translateY: '-50%' }]
+  },
+  labelInputRow: {
+    flexDirection: 'row'
+  },
+  labelInputAction: {
+    fontSize: 12,
+    paddingLeft: 4,
+    paddingRight: 4,
+    paddingTop: 4,
+    paddingBottom: 4
   },
   labelInput: {
     backgroundColor: 'rgba(244, 244, 244, 1)',
