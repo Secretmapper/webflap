@@ -264,7 +264,7 @@ export function AutomataEditor(props) {
     function onEdgeCreate(sourceNode, targetNode, addedEles) {
       // TODO: Have all these data handled in one place
       props.transitions.set(addedEles.id(), {
-        id: addedEles.id,
+        id: addedEles.id(),
         label: addedEles.label,
         source: { data: sourceNode.data() },
         target: { data: targetNode.data() }

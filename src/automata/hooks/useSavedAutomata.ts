@@ -102,25 +102,34 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
   ])
 
   const elements = useMemo(
-    () => [
-      ...states.map((state: any) => ({
-        ...state,
-        classes: [
-          'dfa__state',
-          initialState === state.data.id ? 'dfa__state--initial' : '',
-          finalStates.has(state.data.id) ? 'dfa__state--final' : ''
-        ]
-      })),
-      ...Array.from(transitions.values()).map((trans: any) => ({
-        data: {
-          id: trans.id,
-          source: trans.source.data.id,
-          target: trans.target.data.id,
-          label: makeTMTransitionLabel(trans)
-        },
-        classes: 'autorotate'
-      }))
-    ],
+    () => {
+      const statesMap = new Map(states)
+      states.map((o: any) => statesMap.set(o.data.id, o))
+
+      const filteredTransitions = Array
+        .from(transitions.values())
+        .filter(transition => statesMap.has(transition.source.data.id) && statesMap.has(transition.target.data.id))
+
+      return [
+        ...states.map((state: any) => ({
+          ...state,
+          classes: [
+            'dfa__state',
+            initialState === state.data.id ? 'dfa__state--initial' : '',
+            finalStates.has(state.data.id) ? 'dfa__state--final' : ''
+          ]
+        })),
+        ...filteredTransitions.map((trans: any) => ({
+          data: {
+            id: trans.id,
+            source: trans.source.data.id,
+            target: trans.target.data.id,
+            label: makeTMTransitionLabel(trans)
+          },
+          classes: 'autorotate'
+        }))
+      ]
+    },
     []
   )
 
