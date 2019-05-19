@@ -260,14 +260,18 @@ export function AutomataEditor(props) {
     const onEdgeEdit = e => {
       const edge = e.target
       const { x, y } = edge.renderedMidpoint()
+      const transition = props.transitions.get(edge.id())
+      const label = transition.label
+      const valueLeft = transition.left
+      const valueRight = transition.right
 
       setEditing({
         x,
         y,
         id: edge.id(),
-        value: edge.data('label'),
-        valueLeft: '',
-        valueRight: '',
+        value: label,
+        valueLeft,
+        valueRight,
         type: 'edge'
       })
       inputEl.current.focus()
@@ -313,13 +317,23 @@ export function AutomataEditor(props) {
         document.activeElement !== inputRight
 
       if (isFocusOut) {
-        cy.$(`#${editing.id}`).data('label', input.value)
-        // update root transitions object as well
-        // unfortunately we have to do this dirty
-        // hack since there are two sources of truth
-        const trans = props.transitions.get(editing.id)
-        if (trans && editing.type === 'edge') {
-          trans.label = input.value
+        if (editing.type === 'node') {
+          cy.$(`#${editing.id}`).data('label', input.value)
+        } else {
+          cy.$(`#${editing.id}`).data(
+            'label',
+            `${inputLeft.value} ; ${input.value} ; ${inputRight.value}`
+          )
+
+          // update root transitions object as well
+          // unfortunately we have to do this dirty
+          // hack since there are two sources of truth
+          const trans = props.transitions.get(editing.id)
+          if (trans && editing.type === 'edge') {
+            trans.label = input.value
+            trans.left = inputLeft.value
+            trans.right = inputRight.value
+          }
         }
 
         setEditing(null)
@@ -343,15 +357,17 @@ export function AutomataEditor(props) {
             { left: editing.x, top: editing.y }
           ]}
         >
-          <TextInput
-            selectTextOnFocus
-            ref={inputElLeft}
-            style={[styles.labelInput, { left: editing.x, top: editing.y }]}
-            value={editing.valueLeft || ''}
-            placeholder="&#955;"
-            onChange={onEditingLeftValueChange}
-            onBlur={onNodeLabelInputBlur}
-          />
+          {editing.type !== 'node' && (
+            <TextInput
+              selectTextOnFocus
+              ref={inputElLeft}
+              style={[styles.labelInput, { left: editing.x, top: editing.y }]}
+              value={editing.valueLeft || ''}
+              placeholder="&#955;"
+              onChange={onEditingLeftValueChange}
+              onBlur={onNodeLabelInputBlur}
+            />
+          )}
           <TextInput
             selectTextOnFocus
             ref={inputEl}
@@ -360,15 +376,17 @@ export function AutomataEditor(props) {
             onChange={onEditingValueChange}
             onBlur={onNodeLabelInputBlur}
           />
-          <Picker
-            ref={inputElRight}
-            selectedValue={editing.valueRight || 'L'}
-            onValueChange={onTMDirectionChange}
-            style={[{ left: editing.x, top: editing.y }]}
-          >
-            <Picker.Item label="L" value="L" />
-            <Picker.Item label="R" value="R" />
-          </Picker>
+          {editing.type !== 'node' && (
+            <Picker
+              ref={inputElRight}
+              selectedValue={editing.valueRight || 'L'}
+              onValueChange={onTMDirectionChange}
+              style={[{ left: editing.x, top: editing.y }]}
+            >
+              <Picker.Item label="L" value="L" />
+              <Picker.Item label="R" value="R" />
+            </Picker>
+          )}
         </View>
       )}
     </View>
