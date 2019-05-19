@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { StyleSheet, TextInput, View } from 'react-native'
+import ReactDOM from 'react-dom'
+import { StyleSheet, TextInput, Picker, View } from 'react-native'
 import Cytoscape from 'react-cytoscapejs'
 import cyStylesheet from './stylesheet'
 
 export function AutomataEditor(props) {
   const cyRef = useRef(null)
+  const inputElLeft = useRef(null)
+  const inputElRight = useRef(null)
   const inputEl = useRef(null)
   const [prevLayout, setPrevLayout] = useState(undefined)
   const [prevStepping, setPrevStepping] = useState(props.stepping)
@@ -27,6 +30,8 @@ export function AutomataEditor(props) {
           y,
           id: node.id(),
           value: node.data('label'),
+          valueLeft: '',
+          valueRight: '',
           type: 'node'
         })
         inputEl.current.focus()
@@ -39,6 +44,10 @@ export function AutomataEditor(props) {
       }
 
       const onSurfaceClick = evt => {
+        if (editing) {
+          return
+        }
+
         const target = evt.target || evt.cyTarget
         if (target === cy) {
           const node = ur.do('add', {
@@ -169,6 +178,8 @@ export function AutomataEditor(props) {
         y,
         id: edge.id(),
         value: edge.data('label'),
+        valueLeft: '',
+        valueRight: '',
         type: 'edge'
       })
       inputEl.current.focus()
@@ -194,19 +205,38 @@ export function AutomataEditor(props) {
   const onEditingValueChange = e => {
     setEditing({ ...editing, value: e.target.value })
   }
+  const onEditingLeftValueChange = e => {
+    setEditing({ ...editing, valueLeft: e.target.value })
+  }
+  const onTMDirectionChange = valueRight => {
+    setEditing({ ...editing, valueRight })
+  }
   const onNodeLabelInputBlur = e => {
+    // TODO: use onFocusOut (see: https://github.com/facebook/react/issues/6410)
     const cy = cyRef.current
+    setTimeout(function() {
+      const input = ReactDOM.findDOMNode(inputEl.current)
+      const inputLeft = ReactDOM.findDOMNode(inputElLeft.current)
+      const inputRight = ReactDOM.findDOMNode(inputElRight.current)
 
-    cy.$(`#${editing.id}`).data('label', e.target.value)
-    // update root transitions object as well
-    // unfortunately we have to do this dirty
-    // hack since there are two sources of truth
-    const trans = props.transitions.get(editing.id)
-    if (trans && editing.type === 'edge') {
-      trans.label = e.target.value
-    }
+      const isFocusOut =
+        document.activeElement !== input &&
+        document.activeElement !== inputLeft &&
+        document.activeElement !== inputRight
 
-    setEditing(null)
+      if (isFocusOut) {
+        cy.$(`#${editing.id}`).data('label', input.value)
+        // update root transitions object as well
+        // unfortunately we have to do this dirty
+        // hack since there are two sources of truth
+        const trans = props.transitions.get(editing.id)
+        if (trans && editing.type === 'edge') {
+          trans.label = input.value
+        }
+
+        setEditing(null)
+      }
+    }, 0)
   }
 
   return (
@@ -219,14 +249,39 @@ export function AutomataEditor(props) {
         style={{ height: '100%', width: '100%' }}
       />
       {editing && (
-        <TextInput
-          selectTextOnFocus
-          ref={inputEl}
-          style={[styles.labelInput, { left: editing.x, top: editing.y }]}
-          value={editing.value}
-          onChange={onEditingValueChange}
-          onBlur={onNodeLabelInputBlur}
-        />
+        <View
+          style={[
+            styles.labelInputContainer,
+            { left: editing.x, top: editing.y }
+          ]}
+        >
+          <TextInput
+            selectTextOnFocus
+            ref={inputElLeft}
+            style={[styles.labelInput, { left: editing.x, top: editing.y }]}
+            value={editing.valueLeft}
+            placeholder="&#955;"
+            onChange={onEditingLeftValueChange}
+            onBlur={onNodeLabelInputBlur}
+          />
+          <TextInput
+            selectTextOnFocus
+            ref={inputEl}
+            style={[styles.labelInput, { left: editing.x, top: editing.y }]}
+            value={editing.value}
+            onChange={onEditingValueChange}
+            onBlur={onNodeLabelInputBlur}
+          />
+          <Picker
+            ref={inputElRight}
+            selectedValue={editing.valueRight}
+            onValueChange={onTMDirectionChange}
+            style={[{ left: editing.x, top: editing.y }]}
+          >
+            <Picker.Item label="L" value="L" />
+            <Picker.Item label="R" value="R" />
+          </Picker>
+        </View>
       )}
     </View>
   )
@@ -307,12 +362,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fefefe',
     width: '100%'
   },
-  labelInput: {
-    fontSize: 14,
-    outline: 'none',
+  labelInputContainer: {
     position: 'absolute',
-    textAlign: 'center',
     transform: [{ translateX: '-50%' }, { translateY: '-50%' }]
+  },
+  labelInput: {
+    fontSize: 16,
+    textAlign: 'center'
   }
 })
 
