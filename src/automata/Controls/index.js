@@ -119,6 +119,7 @@ export default function Controls(props) {
               onNext={onNext}
             />
             <Configurations
+              type="tm"
               finalStates={finalStates}
               rejected={rejectedConfigs}
               configurations={configs}

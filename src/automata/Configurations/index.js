@@ -10,6 +10,7 @@ export default function Configurations(props) {
       {props.rejected.map(config => (
         <Config
           rejected
+          type={props.type}
           key={config.hash}
           config={config}
           onHover={props.onConfigHover}
@@ -18,6 +19,7 @@ export default function Configurations(props) {
       ))}
       {props.configurations.map(config => (
         <Config
+          type={props.type}
           key={config.hash}
           config={config}
           onHover={props.onConfigHover}
@@ -47,11 +49,15 @@ function Config(props) {
       ]}
     >
       <Text>{props.config.state.data.label}</Text>
-      <Text>
-        <Text style={styles.processed}>{getProcessedStr(props.config)}</Text>
-        <Text style={styles.unprocessed}>{props.config.unprocessed}</Text>
-      </Text>
-      <Tape />
+      {props.type === 'dfa' && (
+        <Text>
+          <Text style={styles.processed}>{getProcessedStr(props.config)}</Text>
+          <Text style={styles.unprocessed}>{props.config.unprocessed}</Text>
+        </Text>
+      )}
+      {props.type === 'tm' && (
+        <Tape tape={props.config.tape} head={props.config.head} />
+      )}
     </View>
   )
 }
