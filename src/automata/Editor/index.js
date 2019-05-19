@@ -357,7 +357,7 @@ export function AutomataEditor(props) {
             <TextInput
               selectTextOnFocus
               ref={inputElLeft}
-              style={[styles.labelInput, { left: editing.x, top: editing.y }]}
+              style={[styles.labelInput, styles.labelInputText]}
               value={editing.valueLeft || ''}
               placeholder={BLANK_CODE}
               onChange={onEditingLeftValueChange}
@@ -367,7 +367,7 @@ export function AutomataEditor(props) {
           <TextInput
             selectTextOnFocus
             ref={inputEl}
-            style={[styles.labelInput, { left: editing.x, top: editing.y }]}
+            style={[styles.labelInput, styles.labelInputText]}
             value={editing.value || ''}
             onChange={onEditingValueChange}
             onBlur={onNodeLabelInputBlur}
@@ -377,7 +377,7 @@ export function AutomataEditor(props) {
               ref={inputElRight}
               selectedValue={editing.valueRight || 'L'}
               onValueChange={onTMDirectionChange}
-              style={[{ left: editing.x, top: editing.y }]}
+              style={styles.labelInput}
             >
               <Picker.Item label="L" value="L" />
               <Picker.Item label="R" value="R" />
@@ -466,11 +466,18 @@ const styles = StyleSheet.create({
   },
   labelInputContainer: {
     position: 'absolute',
+    flexDirection: 'row',
     transform: [{ translateX: '-50%' }, { translateY: '-50%' }]
   },
   labelInput: {
-    fontSize: 16,
-    textAlign: 'center'
+    backgroundColor: 'rgba(244, 244, 244, 1)',
+    textAlign: 'center',
+    outlineWidth: 'thin',
+    margin: 2,
+    width: 80
+  },
+  labelInputText: {
+    fontSize: 16
   }
 })
 
