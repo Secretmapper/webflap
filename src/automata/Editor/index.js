@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { StyleSheet, TextInput, Picker, View } from 'react-native'
+import { useDebouncedCallback } from 'use-debounce'
 import Cytoscape from 'react-cytoscapejs'
 import cyStylesheet from './stylesheet'
 import { BLANK_CODE, makeTMTransitionLabel } from '../helpers'
@@ -16,6 +17,15 @@ export function AutomataEditor(props) {
     props.configHovered
   )
   const [editing, setEditing] = useState(null)
+  const [saveNodes] = useDebouncedCallback(
+    () => {
+      if (cyRef.current) {
+        props.onNodesChange(cyRef.current.nodes().jsons())
+      }
+    },
+    1000,
+    [props.onNodesChange]
+  )
 
   const setNodeAsStart = useCallback(
     e => {
@@ -194,6 +204,10 @@ export function AutomataEditor(props) {
       }
 
       cy.on('tap', onSurfaceClick)
+      cy.on('data', saveNodes)
+      cy.on('add', saveNodes)
+      cy.on('remove', saveNodes)
+      cy.on('position', saveNodes)
       cy.cxtmenu(cxtMenuOpts)
 
       function onKeydown(e) {

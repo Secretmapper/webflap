@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import flatten from 'lodash.flatten'
 import Layout from './Layout'
 import Editor from './Editor'
@@ -60,6 +60,17 @@ export default function Automata() {
   )
   const [rejectedConfigs, setRejectedConfigs] = useState([])
   const [inputString, setInputString] = useState('bc')
+  const onNodesChange = useCallback(nodes => {
+    console.log(
+      nodes
+        .filter(node => node.classes !== 'eh-handle')
+        .map(node => ({
+          data: node.data,
+          position: node.position,
+          classes: node.classes
+        }))
+    )
+  })
 
   const setCy = cy => {
     cyRef.current = cy
@@ -135,6 +146,7 @@ export default function Automata() {
             <Editor
               cy={setCy}
               layout={layout}
+              onNodesChange={onNodesChange}
               elements={elements}
               finalStates={finalStates}
               initialState={initialState}
