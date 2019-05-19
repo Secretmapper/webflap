@@ -5,50 +5,32 @@ import Editor from './Editor'
 import ZoomedModal from './ZoomedModal'
 import Instructions from './Instructions'
 import Controls from './Controls'
-import { resolveConfig, makeTMTransitionLabel } from './helpers'
+import { resolveConfig } from './helpers'
 import { initialConfig, step } from './helpers/tm'
-import {
-  initialState as initialStateFixture,
-  finalStates,
-  states,
-  transitions
-} from './tm.fixtures'
-
-const elements = [
-  ...Array.from(states.values()).map(state => ({
-    ...state,
-    classes: [
-      'dfa__state',
-      initialStateFixture === state.data.id ? 'dfa__state--initial' : '',
-      finalStates.has(state.data.id) ? 'dfa__state--final' : ''
-    ]
-  })),
-  ...Array.from(transitions.values()).map(trans => ({
-    data: {
-      id: trans.id,
-      source: trans.source.data.id,
-      target: trans.target.data.id,
-      label: makeTMTransitionLabel(trans)
-    },
-    classes: 'autorotate'
-  }))
-]
+import useSavedAutomata from './useSavedAutomata'
 
 export default function Automata() {
-  const cyRef = useRef(null)
-
   const [showModal, setShowModal] = useState(false)
-  const [initialState, setInitialState] = useState(initialStateFixture)
-  const [configs, setConfigs] = useState([initialConfig(initialState)])
+
+  const cyRef = useRef(null)
+  const [
+    initialElements,
+    initialState,
+    setInitialState,
+    finalStates,
+    setFinalStates,
+    transitions,
+    setTransitions,
+    inputString,
+    setInputString,
+    multipleInput,
+    setMultipleInput
+  ] = useSavedAutomata()
+
   const [layout, setLayout] = useState(undefined)
-  const [configBeingHovered, setConfigBeingHovered] = useState(null)
-  const [multipleInput, setMultipleInput] = useState([
-    'b',
-    'bc',
-    'ssbc',
-    'ss',
-    'abc'
-  ])
+
+  // TODO: un-state-ify this and memoize instead
+  const [configs, setConfigs] = useState([initialConfig(initialState)])
   const [multipleInputConfigs, setMultipleInputConfigs] = useState(
     multipleInput.map(input =>
       resolveConfig(
@@ -58,8 +40,10 @@ export default function Automata() {
       )
     )
   )
+
   const [rejectedConfigs, setRejectedConfigs] = useState([])
-  const [inputString, setInputString] = useState('bc')
+  const [configBeingHovered, setConfigBeingHovered] = useState(null)
+
   const onNodesChange = useCallback(nodes => {
     console.log(
       nodes
@@ -147,7 +131,7 @@ export default function Automata() {
               cy={setCy}
               layout={layout}
               onNodesChange={onNodesChange}
-              elements={elements}
+              elements={initialElements}
               finalStates={finalStates}
               initialState={initialState}
               setInitialState={setInitialState}
