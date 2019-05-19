@@ -121,6 +121,7 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
         })),
         ...filteredTransitions.map((trans: any) => ({
           data: {
+            ...trans,
             id: trans.id,
             source: trans.source.data.id,
             target: trans.target.data.id,
