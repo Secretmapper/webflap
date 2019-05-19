@@ -347,7 +347,7 @@ export function AutomataEditor(props) {
             selectTextOnFocus
             ref={inputElLeft}
             style={[styles.labelInput, { left: editing.x, top: editing.y }]}
-            value={editing.valueLeft}
+            value={editing.valueLeft || ''}
             placeholder="&#955;"
             onChange={onEditingLeftValueChange}
             onBlur={onNodeLabelInputBlur}
@@ -356,13 +356,13 @@ export function AutomataEditor(props) {
             selectTextOnFocus
             ref={inputEl}
             style={[styles.labelInput, { left: editing.x, top: editing.y }]}
-            value={editing.value}
+            value={editing.value || ''}
             onChange={onEditingValueChange}
             onBlur={onNodeLabelInputBlur}
           />
           <Picker
             ref={inputElRight}
-            selectedValue={editing.valueRight}
+            selectedValue={editing.valueRight || 'L'}
             onValueChange={onTMDirectionChange}
             style={[{ left: editing.x, top: editing.y }]}
           >
