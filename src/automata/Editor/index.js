@@ -4,6 +4,8 @@ import { StyleSheet, TextInput, Picker, View } from 'react-native'
 import Cytoscape from 'react-cytoscapejs'
 import cyStylesheet from './stylesheet'
 
+const LAMBDA_CODE = String.fromCharCode(0x03bb)
+
 export function AutomataEditor(props) {
   const cyRef = useRef(null)
   const inputElLeft = useRef(null)
@@ -320,20 +322,19 @@ export function AutomataEditor(props) {
         if (editing.type === 'node') {
           cy.$(`#${editing.id}`).data('label', input.value)
         } else {
-          cy.$(`#${editing.id}`).data(
-            'label',
-            `${inputLeft.value} ; ${input.value} ; ${inputRight.value}`
-          )
-
           // update root transitions object as well
           // unfortunately we have to do this dirty
           // hack since there are two sources of truth
           const trans = props.transitions.get(editing.id)
-          if (trans && editing.type === 'edge') {
-            trans.label = input.value
-            trans.left = inputLeft.value
-            trans.right = inputRight.value
-          }
+          trans.left = inputLeft.value || LAMBDA_CODE
+          trans.label = input.value
+          trans.right = inputRight.value
+
+          cy.$(`#${editing.id}`).data(
+            'label',
+            `${inputLeft.value || LAMBDA_CODE} ; ${input.value ||
+              LAMBDA_CODE} ; ${inputRight.value}`
+          )
         }
 
         setEditing(null)
@@ -363,7 +364,7 @@ export function AutomataEditor(props) {
               ref={inputElLeft}
               style={[styles.labelInput, { left: editing.x, top: editing.y }]}
               value={editing.valueLeft || ''}
-              placeholder="&#955;"
+              placeholder={LAMBDA_CODE}
               onChange={onEditingLeftValueChange}
               onBlur={onNodeLabelInputBlur}
             />
