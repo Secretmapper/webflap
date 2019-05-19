@@ -76,7 +76,6 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
   )
 
   const [initialState, setInitialState] = useState(initialStateFixture)
-  const [item, setItem] = useLocalStorage('name', 'Initial Value')
   const [finalStates, setFinalStates] = useState(finalStatesFixture)
 
   /** inputs **/
