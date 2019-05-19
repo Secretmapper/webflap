@@ -5,7 +5,8 @@ import Editor from './Editor'
 import ZoomedModal from './ZoomedModal'
 import Instructions from './Instructions'
 import Controls from './Controls'
-import { step, resolveConfig, makeTMTransitionLabel } from './helpers'
+import { resolveConfig, makeTMTransitionLabel } from './helpers'
+import { initialConfig, step } from './helpers/tm'
 import {
   initialState as initialStateFixture,
   finalStates,
@@ -32,14 +33,6 @@ const elements = [
     classes: 'autorotate'
   }))
 ]
-
-const initialConfig = (initialState, input = 'bc') => ({
-  hash: '' + Math.random(),
-  // TODO: Type this
-  state: { data: { id: initialState } },
-  input,
-  unprocessed: input
-})
 
 export default function Automata() {
   const cyRef = useRef(null)

@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
 type Props = {
+  tape: string,
+  head: number
 }
 
 type CellProps = {
-  current?: boolean
+  current?: boolean,
+  value: string
 }
 
 function TapeCell (props: CellProps) {
@@ -14,27 +17,19 @@ function TapeCell (props: CellProps) {
       styles.cell,
       props.current && styles.cellHighlighted
     ]}>
-      <Text></Text>
+      <Text style={styles.cellText}>{props.value}</Text>
     </View>
   )
 }
 
 function Tape (props: Props) {
+  const tape = useMemo(() => props.tape.split(''), [props.tape])
+
   return (
     <View style={styles.container}>
-      <TapeCell current />
-      <TapeCell />
-      <TapeCell />
-      <TapeCell />
-      <TapeCell />
-      <TapeCell />
-      <TapeCell />
-      <TapeCell />
-      <TapeCell />
-      <TapeCell />
-      <TapeCell />
-      <TapeCell />
-      <TapeCell />
+      {tape.map((cell, i) => (
+        <TapeCell key={i} value={cell} current={i === props.head} />
+      ))}
     </View>
   )
 }
@@ -49,15 +44,19 @@ const styles = StyleSheet.create({
     boxSizing: 'border-box',
     flexDirection: 'row',
     marginBottom: 4,
-    marginTop: 4
+    marginTop: 4,
+    overflow: 'scroll'
   },
   cell: {
     borderColor: 'gray',
     borderRightWidth: 1,
     borderStyle: 'dotted',
-    paddingBottom: 2,
     minHeight: 19,
-    minWidth: 19
+    minWidth: 19,
+    paddingBottom: 2
+  },
+  cellText: {
+    textAlign: 'center'
   },
   cellHighlighted: {
     backgroundColor: 'rgba(255,255,200,1)'
