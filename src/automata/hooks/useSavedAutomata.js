@@ -1,14 +1,42 @@
 import { useCallback, useMemo, useState } from 'react'
+import useLocalStorage from 'react-use-localstorage'
 import { makeTMTransitionLabel } from '../helpers'
 import {
   initialState as initialStateFixture,
   finalStates as finalStatesFixture,
-  states,
-  transitions
+  states as statesFixture,
+  transitions as transitionsFixture
 } from '../tm.fixtures'
 
+const statesFixtureString = JSON.stringify(Array.from(statesFixture.values()))
+const transitionsFixtureString = JSON.stringify(
+  Array.from(transitionsFixture.values())
+)
+
 export default function useSavedAutomata() {
+  const [statesString, setStatesString] = useLocalStorage(
+    'editor__states',
+    statesFixtureString
+  )
+  const [transitionsString, setTransitionsString] = useLocalStorage(
+    'editor__transitions',
+    transitionsFixtureString
+  )
+
+  const states = useMemo(() => JSON.parse(statesString), [statesString])
+  const transitions = useMemo(() => JSON.parse(transitionsString), [
+    transitionsString
+  ])
+
+  const setStates = useCallback(
+    nodes => {
+      setStatesString(JSON.stringify(nodes))
+    },
+    [states]
+  )
+
   const [initialState, setInitialState] = useState(initialStateFixture)
+  const [item, setItem] = useLocalStorage('name', 'Initial Value')
   const [finalStates, setFinalStates] = useState(finalStatesFixture)
 
   /** inputs **/
@@ -25,7 +53,7 @@ export default function useSavedAutomata() {
 
   const elements = useMemo(
     () => [
-      ...Array.from(states.values()).map(state => ({
+      ...states.map(state => ({
         ...state,
         classes: [
           'dfa__state',
@@ -33,7 +61,7 @@ export default function useSavedAutomata() {
           finalStates.has(state.data.id) ? 'dfa__state--final' : ''
         ]
       })),
-      ...Array.from(transitions.values()).map(trans => ({
+      ...transitions.map(trans => ({
         data: {
           id: trans.id,
           source: trans.source.data.id,
@@ -52,6 +80,7 @@ export default function useSavedAutomata() {
     setInitialState,
     finalStates,
     setFinalStates,
+    setStates,
     transitions,
     setTransitions,
     inputString,

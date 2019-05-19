@@ -19,6 +19,7 @@ export default function Automata() {
     setInitialState,
     finalStates, // setFinalStates,
     ,
+    setStates,
     transitions, // setTransitions,
     ,
     inputString,
@@ -45,7 +46,7 @@ export default function Automata() {
   const [configBeingHovered, setConfigBeingHovered] = useState(null)
 
   const onNodesChange = useCallback(nodes => {
-    console.log(
+    setStates(
       nodes
         .filter(node => node.classes !== 'eh-handle')
         .map(node => ({
