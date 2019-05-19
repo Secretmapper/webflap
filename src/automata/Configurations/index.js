@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { isConfigAccepted } from '../helpers'
 import useHover from '../../core/hooks/useHover'
+import Tape from '../Tape'
 
 export default function Configurations(props) {
   return (
@@ -50,6 +51,7 @@ function Config(props) {
         <Text style={styles.processed}>{getProcessedStr(props.config)}</Text>
         <Text style={styles.unprocessed}>{props.config.unprocessed}</Text>
       </Text>
+      <Tape />
     </View>
   )
 }
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     padding: 8,
     cursor: 'pointer',
-    height: 50
+    minHeight: 50
   },
   configHovered: {
     borderColor: 'rgba(0, 0, 0, 0.15)',
