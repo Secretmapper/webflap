@@ -13,7 +13,34 @@ const transitionsFixtureString = JSON.stringify(
   Array.from(transitionsFixture.values())
 )
 
-export default function useSavedAutomata() {
+type UseSavedAutomataArray = [
+  // elements
+  any,
+  // initialState
+  string,
+  // setInitialState
+  Function,
+  // finalStates
+  any,
+  // setFinalStates
+  Function,
+  // setStates
+  Function,
+  // transitions
+  any,
+  // setTransitions
+  Function,
+  // inputString
+  string,
+  // setInputString
+  Function,
+  // multipleInput
+  Array<string>,
+  // setMultipleInput
+  Function
+]
+
+export default function useSavedAutomata(): UseSavedAutomataArray {
   const [statesString, setStatesString] = useLocalStorage(
     'editor__states',
     statesFixtureString
@@ -49,11 +76,11 @@ export default function useSavedAutomata() {
     'abc'
   ])
   // XXX: we're currently mutating transitions directly, but ideally that is immutable
-  const setTransitions = useCallback(() => {})
+  const setTransitions = useCallback(() => {}, [])
 
   const elements = useMemo(
     () => [
-      ...states.map(state => ({
+      ...states.map((state: any) => ({
         ...state,
         classes: [
           'dfa__state',
@@ -61,7 +88,7 @@ export default function useSavedAutomata() {
           finalStates.has(state.data.id) ? 'dfa__state--final' : ''
         ]
       })),
-      ...transitions.map(trans => ({
+      ...transitions.map((trans: any) => ({
         data: {
           id: trans.id,
           source: trans.source.data.id,
