@@ -7,9 +7,11 @@ import 'typeface-montserrat'
 import Cytoscape from 'cytoscape'
 import edgehandles from 'cytoscape-edgehandles'
 import cxtmenu from 'cytoscape-cxtmenu'
+import undoRedo from 'cytoscape-undo-redo'
 
 Cytoscape.use(edgehandles)
 Cytoscape.use(cxtmenu)
+undoRedo(Cytoscape)
 
 // register the app
 AppRegistry.registerComponent('App', () => App)

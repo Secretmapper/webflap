@@ -16,6 +16,7 @@ export function AutomataEditor(props) {
   useEffect(
     () => {
       const cy = cyRef.current
+      const ur = cy.undoRedo({ stackSizeLimit: 15 })
 
       const onNodeEdit = e => {
         const node = e.target
@@ -34,13 +35,13 @@ export function AutomataEditor(props) {
 
       const onNodeDelete = e => {
         const node = e.target
-        node.remove()
+        ur.do('remove', node)
       }
 
       const onSurfaceClick = evt => {
         const target = evt.target || evt.cyTarget
         if (target === cy) {
-          const node = cy.add({
+          const node = ur.do('add', {
             data: {
               // TODO: Add actual uuid generation
               id: 'new' + Math.round(Math.random() * 100),
@@ -97,6 +98,18 @@ export function AutomataEditor(props) {
       cy.on('tap', onSurfaceClick)
       cy.cxtmenu(cxtMenuOpts)
 
+      function onKeydown(e) {
+        if ((e.ctrlKey || e.metaKey) && e.target.nodeName === 'BODY') {
+          e.preventDefault()
+          if (e.which === 90) {
+            ur.undo()
+          } else if (e.which === 89) {
+            ur.redo()
+          }
+        }
+      }
+      document.addEventListener('keydown', onKeydown)
+
       let raf
       let animOffset = 0
 
@@ -114,6 +127,7 @@ export function AutomataEditor(props) {
         if (raf) {
           cancelAnimationFrame(raf)
         }
+        document.removeEventListener('keydown', onKeydown)
       }
     },
     ['once']
