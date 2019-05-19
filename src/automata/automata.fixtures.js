@@ -21,4 +21,4 @@ export const transitions = new Map([
 ])
 
 export const initialState = 'q0'
-export const finalStates = ['q4']
+export const finalStates = new Set(['q4'])

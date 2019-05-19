@@ -61,17 +61,17 @@ export function step (
   return configs
 }
 
-export function isConfigAccepted(finalStates: Array<string>, config: AutomataConfiguration) {
+export function isConfigAccepted(finalStates: Set<string>, config: AutomataConfiguration) {
   return (
     config.unprocessed.length === 0
-    && finalStates.indexOf(config.state.data.id) !== -1
+    && finalStates.has(config.state.data.id)
   )
 }
 
 export function resolveConfig(
   transitions:AutomataTransitions,
   configuration: AutomataConfiguration,
-  finalStates: Array<string>
+  finalStates: Set<string>
 ) {
   const lIsConfigAccepted = (config: AutomataConfiguration) => isConfigAccepted(finalStates, config)
   let configs = [configuration]

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { StyleSheet, TextInput, Picker, View } from 'react-native'
 import Cytoscape from 'react-cytoscapejs'
@@ -16,10 +16,32 @@ export function AutomataEditor(props) {
   )
   const [editing, setEditing] = useState(null)
 
+  const setNodeAsStart = useCallback(e => {})
+  const setNodeAsFinal = useCallback(
+    e => {
+      const cy = cyRef.current
+      const ur = cy.undoRedo({ stackSizeLimit: 15 })
+
+      ur.do('setAsFinal', e.target)
+    },
+    [cyRef]
+  )
+
   useEffect(
     () => {
       const cy = cyRef.current
       const ur = cy.undoRedo({ stackSizeLimit: 15 })
+      ur.action(
+        'setAsFinal',
+        eles => {
+          props.finalStates.add(eles.data().id)
+          // props.finalStates
+          return eles.addClass('dfa__state--final')
+        },
+        eles => {
+          return eles.removeClass('dfa__state--final')
+        }
+      )
 
       const onNodeEdit = e => {
         const node = e.target
@@ -70,6 +92,24 @@ export function AutomataEditor(props) {
         menuRadius: 80,
         selector: 'node',
         commands: [
+          {
+            fillColor: 'rgba(200, 200, 200, 0.75)',
+            content: 'Set as Initial',
+            contentStyle: {},
+            select: function(ele) {
+              setNodeAsStart({ target: ele })
+            },
+            enabled: true
+          },
+          {
+            fillColor: 'rgba(200, 200, 200, 0.75)',
+            content: 'Set as Final',
+            contentStyle: {},
+            select: function(ele) {
+              setNodeAsFinal({ target: ele })
+            },
+            enabled: true
+          },
           {
             fillColor: 'rgba(200, 200, 200, 0.75)',
             content: 'edit',

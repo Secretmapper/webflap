@@ -19,7 +19,7 @@ const elements = [
     classes: [
       'dfa__state',
       initialState === state.data.id ? 'dfa__state--initial' : '',
-      finalStates.indexOf(state.data.id) !== -1 ? 'dfa__state--final' : ''
+      finalStates.has(state.data.id) ? 'dfa__state--final' : ''
     ]
   })),
   ...Array.from(transitions.values()).map(trans => ({
@@ -133,6 +133,8 @@ export default function Automata() {
               cy={setCy}
               layout={layout}
               elements={elements}
+              finalStates={finalStates}
+              initialState={initialState}
               transitions={transitions}
               stepping={configs}
               configHovered={configBeingHovered}
