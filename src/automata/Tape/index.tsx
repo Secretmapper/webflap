@@ -26,27 +26,31 @@ function Tape (props: Props) {
   const tape = useMemo(() => props.tape.split(''), [props.tape])
 
   return (
-    <View style={styles.container}>
+    <div className='hide-scrollbar' style={webstyles.container}>
       {tape.map((cell, i) => (
         <TapeCell key={i} value={cell} current={i === props.head} />
       ))}
-    </View>
+    </div>
   )
 }
 
-const styles = StyleSheet.create({
+const webstyles = {
   container: {
     backgroundColor: 'rgba(255,255,200,0.4)',
+    border: 0,
     borderColor: 'gray',
     borderLeftWidth: 1,
     borderStyle: 'dotted',
     boxShadow: '0px 1px 3px rgba(0,0,0,0.2)',
-    boxSizing: 'border-box',
-    flexDirection: 'row',
+    boxSizing: 'border-box' as 'border-box',
+    display: 'flex' as 'flex',
+    flexDirection: 'row' as 'row',
     marginBottom: 4,
-    marginTop: 4,
-    overflow: 'scroll'
-  },
+    marginTop: 4
+  }
+}
+
+const styles = StyleSheet.create({
   cell: {
     borderColor: 'gray',
     borderRightWidth: 1,
