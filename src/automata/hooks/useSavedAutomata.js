@@ -1,11 +1,11 @@
 import { useCallback, useMemo, useState } from 'react'
-import { makeTMTransitionLabel } from './helpers'
+import { makeTMTransitionLabel } from '../helpers'
 import {
   initialState as initialStateFixture,
   finalStates as finalStatesFixture,
   states,
   transitions
-} from './tm.fixtures'
+} from '../tm.fixtures'
 
 export default function useSavedAutomata() {
   const [initialState, setInitialState] = useState(initialStateFixture)

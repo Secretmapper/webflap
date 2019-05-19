@@ -7,7 +7,7 @@ import Instructions from './Instructions'
 import Controls from './Controls'
 import { resolveConfig } from './helpers'
 import { initialConfig, step } from './helpers/tm'
-import useSavedAutomata from './useSavedAutomata'
+import { useSavedAutomata, useSaveAsImage } from './hooks'
 
 export default function Automata() {
   const [showModal, setShowModal] = useState(false)
@@ -17,10 +17,10 @@ export default function Automata() {
     initialElements,
     initialState,
     setInitialState,
-    finalStates,
-    setFinalStates,
-    transitions,
-    setTransitions,
+    finalStates, // setFinalStates,
+    ,
+    transitions, // setTransitions,
+    ,
     inputString,
     setInputString,
     multipleInput,
@@ -104,23 +104,7 @@ export default function Automata() {
     setConfigs(flatten(newConfigs))
     setRejectedConfigs(newRejectedConfigs)
   }
-  const saveAsImage = type => {
-    let image
-
-    if (type === 'image/jpeg') {
-      image = cyRef.current.jpeg()
-    } else if (type === 'image/png') {
-      image = cyRef.current.png()
-    }
-
-    if (image) {
-      const url = image.replace(
-        /^data:image\/[^;]+/,
-        'data:application/octet-stream'
-      )
-      window.open(url)
-    }
-  }
+  const saveAsImage = useSaveAsImage(cyRef.current)
 
   return (
     <Layout
