@@ -1,6 +1,7 @@
 import flatten from 'lodash.flatten'
 
 export const LAMBDA_CODE = String.fromCharCode(0x03bb)
+export const BLANK_CODE = String.fromCharCode(0x2423)
 
 type AutomataState = {
   data: {
@@ -13,26 +14,36 @@ type AutomataState = {
   }
 }
 
-type AutomataTransition = {
+export type AutomataTransition = {
   source: AutomataState,
   target: AutomataState,
   label: string,
   left: string,
-  right: string
+  right: 'L' | 'R'
 }
 
-type AutomataStates = Map<string, AutomataState>
-type AutomataTransitions = Map<string, AutomataTransition>
+export type AutomataStates = Map<string, AutomataState>
+export type AutomataTransitions = Map<string, AutomataTransition>
 
 /**
  * Configuration of the current state step in an automaton
  **/
-type AutomataConfiguration = {
+export type AutomataConfiguration = {
   hash: string,
   parent: AutomataConfiguration,
   state: AutomataState,
   input: string,
   unprocessed: string
+}
+
+export function initialConfig (initialState: number, input = 'bc') {
+  return {
+    hash: '' + Math.random(),
+    // TODO: Type this
+    state: { data: { id: initialState } },
+    input,
+    unprocessed: input
+  }
 }
 
 export function step (
@@ -96,5 +107,5 @@ export function resolveConfig(
 export function makeTMTransitionLabel(
   transition: AutomataTransition
 ) {
-  return `${transition.left || LAMBDA_CODE} ; ${transition.label || LAMBDA_CODE} ; ${transition.right}`
+  return `${transition.left || BLANK_CODE} ; ${transition.label || BLANK_CODE} ; ${transition.right}`
 }
