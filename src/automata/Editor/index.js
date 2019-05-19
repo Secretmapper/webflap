@@ -16,7 +16,15 @@ export function AutomataEditor(props) {
   )
   const [editing, setEditing] = useState(null)
 
-  const setNodeAsStart = useCallback(e => {})
+  const setNodeAsStart = useCallback(
+    e => {
+      const cy = cyRef.current
+      const ur = cy.undoRedo({ stackSizeLimit: 15 })
+
+      ur.do('setAsInitial', e.target)
+    },
+    [cyRef]
+  )
   const setNodeAsFinal = useCallback(
     e => {
       const cy = cyRef.current
@@ -31,6 +39,31 @@ export function AutomataEditor(props) {
     [cyRef]
   )
 
+  useEffect(
+    () => {
+      const ur = cyRef.current.undoRedo()
+
+      function setInitialAction(eles) {
+        const cy = cyRef.current
+        const initialState = props.initialState
+        props.setInitialState(eles.data().id)
+
+        cy.getElementById(initialState).removeClass('dfa__state--initial')
+
+        return [initialState, eles.addClass('dfa__state--initial')]
+      }
+      function setInitialActionUndo([initialState, eles]) {
+        const cy = cyRef.current
+        props.setInitialState(initialState)
+
+        cy.getElementById(initialState).addClass('dfa__state--initial')
+        return eles.removeClass('dfa__state--initial')
+      }
+
+      ur.action('setAsInitial', setInitialAction, setInitialActionUndo)
+    },
+    [props.initialState]
+  )
   useEffect(
     () => {
       const cy = cyRef.current
