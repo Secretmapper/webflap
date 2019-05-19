@@ -20,8 +20,8 @@ export default function Automata() {
     finalStates, // setFinalStates,
     ,
     setStates,
-    transitions, // setTransitions,
-    ,
+    transitions,
+    setTransitions,
     inputString,
     setInputString,
     multipleInput,
@@ -121,6 +121,7 @@ export default function Automata() {
               initialState={initialState}
               setInitialState={setInitialState}
               transitions={transitions}
+              setTransitions={setTransitions}
               stepping={configs}
               configHovered={configBeingHovered}
             />

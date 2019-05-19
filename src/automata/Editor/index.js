@@ -269,6 +269,7 @@ export function AutomataEditor(props) {
         source: { data: sourceNode.data() },
         target: { data: targetNode.data() }
       })
+      props.setTransitions()
 
       onEdgeEdit({ target: addedEles.first() })
     }
@@ -342,6 +343,7 @@ export function AutomataEditor(props) {
           trans.left = inputLeft.value || BLANK_CODE
           trans.label = input.value || BLANK_CODE
           trans.right = inputRight.value
+          props.setTransitions()
 
           cy.$(`#${editing.id}`).data('label', makeTMTransitionLabel(trans))
         }

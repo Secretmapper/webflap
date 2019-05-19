@@ -8,11 +8,7 @@ import {
   transitions as transitionsFixture
 } from '../tm.fixtures'
 
-const statesFixtureString = JSON.stringify(Array.from(statesFixture.values()))
-const transitionsFixtureString = JSON.stringify(
-  Array.from(transitionsFixture.values())
-)
-
+type Transition = { id: string, source: any, target: any, left: string, label: string, right: string }
 type UseSavedAutomataArray = [
   // elements
   any,
@@ -27,7 +23,7 @@ type UseSavedAutomataArray = [
   // setStates
   Function,
   // transitions
-  any,
+  Map<string, Transition>,
   // setTransitions
   Function,
   // inputString
@@ -40,6 +36,19 @@ type UseSavedAutomataArray = [
   Function
 ]
 
+function serializeTransitionMap (map: Map<string, Transition>) {
+  // TODO: currently, transitions is NOT normalized, and state data is saved along with transitions
+
+  return JSON.stringify(
+    Array
+      .from(map)
+      // .map(([k, v]) => [k, { ...v, source: v.source.data.id, target: v.target.data.id }])
+  )
+}
+
+const statesFixtureString = JSON.stringify(Array.from(statesFixture.values()))
+const transitionsFixtureString = serializeTransitionMap(transitionsFixture)
+
 export default function useSavedAutomata(): UseSavedAutomataArray {
   const [statesString, setStatesString] = useLocalStorage(
     'editor__states',
@@ -51,9 +60,13 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
   )
 
   const states = useMemo(() => JSON.parse(statesString), [statesString])
-  const transitions = useMemo(() => JSON.parse(transitionsString), [
+  const transitions = useMemo(() => new Map(JSON.parse(transitionsString)) as Map<string, Transition>, [
     transitionsString
   ])
+  // XXX: we're currently mutating transitions directly, but ideally that is immutable
+  const setTransitions = useCallback(() => {
+    setTransitionsString(serializeTransitionMap(transitions))
+  }, [])
 
   const setStates = useCallback(
     nodes => {
@@ -75,8 +88,6 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
     'ss',
     'abc'
   ])
-  // XXX: we're currently mutating transitions directly, but ideally that is immutable
-  const setTransitions = useCallback(() => {}, [])
 
   const elements = useMemo(
     () => [
@@ -88,7 +99,7 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
           finalStates.has(state.data.id) ? 'dfa__state--final' : ''
         ]
       })),
-      ...transitions.map((trans: any) => ({
+      ...Array.from(transitions.values()).map((trans: any) => ({
         data: {
           id: trans.id,
           source: trans.source.data.id,
