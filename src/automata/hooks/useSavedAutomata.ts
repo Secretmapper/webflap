@@ -17,7 +17,7 @@ type UseSavedAutomataArray = [
   // setInitialState
   Function,
   // finalStates
-  any,
+  Set<string>,
   // setFinalStates
   Function,
   // setStates
@@ -45,9 +45,13 @@ function serializeTransitionMap (map: Map<string, Transition>) {
       // .map(([k, v]) => [k, { ...v, source: v.source.data.id, target: v.target.data.id }])
   )
 }
+function serializeFinalStates (finalStates: Set<string>) {
+  return JSON.stringify(Array.from(finalStates))
+}
 
 const statesFixtureString = JSON.stringify(Array.from(statesFixture.values()))
 const transitionsFixtureString = serializeTransitionMap(transitionsFixture)
+const finalStatesFixtureString = serializeFinalStates(finalStatesFixture)
 
 export default function useSavedAutomata(): UseSavedAutomataArray {
   const [statesString, setStatesString] = useLocalStorage(
@@ -58,14 +62,24 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
     'editor__transitions',
     transitionsFixtureString
   )
+  const [finalStatesString, setFinalStatesString] = useLocalStorage(
+    'editor__finalStates',
+    finalStatesFixtureString
+  )
 
   const states = useMemo(() => JSON.parse(statesString), [statesString])
   const transitions = useMemo(() => new Map(JSON.parse(transitionsString)) as Map<string, Transition>, [
     transitionsString
   ])
-  // XXX: we're currently mutating transitions directly, but ideally that is immutable
+  const finalStates = useMemo(() => new Set(JSON.parse(finalStatesString)) as Set<string>, [
+    finalStatesString
+  ])
+  // XXX: we're currently mutating these things directly, but ideally that is immutable
   const setTransitions = useCallback(() => {
     setTransitionsString(serializeTransitionMap(transitions))
+  }, [])
+  const setFinalStates = useCallback(() => {
+    setFinalStatesString(serializeFinalStates(finalStates))
   }, [])
 
   const setStates = useCallback(
@@ -75,8 +89,7 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
     [states]
   )
 
-  const [initialState, setInitialState] = useState(initialStateFixture)
-  const [finalStates, setFinalStates] = useState(finalStatesFixture)
+  const [initialState, setInitialState] = useLocalStorage('editor__initialState', initialStateFixture)
 
   /** inputs **/
   const [inputString, setInputString] = useState('bc')
@@ -94,7 +107,7 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
         ...state,
         classes: [
           'dfa__state',
-          initialStateFixture === state.data.id ? 'dfa__state--initial' : '',
+          initialState === state.data.id ? 'dfa__state--initial' : '',
           finalStates.has(state.data.id) ? 'dfa__state--final' : ''
         ]
       })),

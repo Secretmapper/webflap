@@ -82,22 +82,22 @@ export function AutomataEditor(props) {
       ur.action(
         'setAsFinal',
         eles => {
-          props.finalStates.add(eles.data().id)
+          props.setFinalStates(props.finalStates.add(eles.data().id))
           return eles.addClass('dfa__state--final')
         },
         eles => {
-          props.finalStates.delete(eles.data().id)
+          props.setFinalStates(props.finalStates.delete(eles.data().id))
           return eles.removeClass('dfa__state--final')
         }
       )
       ur.action(
         'unsetAsFinal',
         eles => {
-          props.finalStates.delete(eles.data().id)
+          props.setFinalStates(props.finalStates.delete(eles.data().id))
           return eles.removeClass('dfa__state--final')
         },
         eles => {
-          props.finalStates.add(eles.data().id)
+          props.setFinalStates(props.finalStates.add(eles.data().id))
           return eles.addClass('dfa__state--final')
         }
       )

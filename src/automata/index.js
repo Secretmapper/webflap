@@ -17,8 +17,8 @@ export default function Automata() {
     initialElements,
     initialState,
     setInitialState,
-    finalStates, // setFinalStates,
-    ,
+    finalStates,
+    setFinalStates,
     setStates,
     transitions,
     setTransitions,
@@ -118,6 +118,7 @@ export default function Automata() {
               onNodesChange={onNodesChange}
               elements={initialElements}
               finalStates={finalStates}
+              setFinalStates={setFinalStates}
               initialState={initialState}
               setInitialState={setInitialState}
               transitions={transitions}
