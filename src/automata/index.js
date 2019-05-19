@@ -5,13 +5,13 @@ import Editor from './Editor'
 import ZoomedModal from './ZoomedModal'
 import Instructions from './Instructions'
 import Controls from './Controls'
-import { step, resolveConfig } from './helpers'
+import { step, resolveConfig, makeTMTransitionLabel } from './helpers'
 import {
   initialState as initialStateFixture,
   finalStates,
   states,
   transitions
-} from './automata.fixtures'
+} from './tm.fixtures'
 
 const elements = [
   ...Array.from(states.values()).map(state => ({
@@ -27,7 +27,7 @@ const elements = [
       id: trans.id,
       source: trans.source.data.id,
       target: trans.target.data.id,
-      label: trans.label
+      label: makeTMTransitionLabel(trans)
     },
     classes: 'autorotate'
   }))

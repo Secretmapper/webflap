@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom'
 import { StyleSheet, TextInput, Picker, View } from 'react-native'
 import Cytoscape from 'react-cytoscapejs'
 import cyStylesheet from './stylesheet'
-
-const LAMBDA_CODE = String.fromCharCode(0x03bb)
+import { LAMBDA_CODE, makeTMTransitionLabel } from '../helpers'
 
 export function AutomataEditor(props) {
   const cyRef = useRef(null)
@@ -327,14 +326,10 @@ export function AutomataEditor(props) {
           // hack since there are two sources of truth
           const trans = props.transitions.get(editing.id)
           trans.left = inputLeft.value || LAMBDA_CODE
-          trans.label = input.value
+          trans.label = input.value || LAMBDA_CODE
           trans.right = inputRight.value
 
-          cy.$(`#${editing.id}`).data(
-            'label',
-            `${inputLeft.value || LAMBDA_CODE} ; ${input.value ||
-              LAMBDA_CODE} ; ${inputRight.value}`
-          )
+          cy.$(`#${editing.id}`).data('label', makeTMTransitionLabel(trans))
         }
 
         setEditing(null)

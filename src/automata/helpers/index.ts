@@ -1,5 +1,7 @@
 import flatten from 'lodash.flatten'
 
+export const LAMBDA_CODE = String.fromCharCode(0x03bb)
+
 type AutomataState = {
   data: {
     id: string,
@@ -14,7 +16,9 @@ type AutomataState = {
 type AutomataTransition = {
   source: AutomataState,
   target: AutomataState,
-  label: string
+  label: string,
+  left: string,
+  right: string
 }
 
 type AutomataStates = Map<string, AutomataState>
@@ -87,4 +91,10 @@ export function resolveConfig(
   } while (configs.length !== 0)
 
   return null
+}
+
+export function makeTMTransitionLabel(
+  transition: AutomataTransition
+) {
+  return `${transition.left || LAMBDA_CODE} ; ${transition.label || LAMBDA_CODE} ; ${transition.right}`
 }
