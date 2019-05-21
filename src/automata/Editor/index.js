@@ -406,11 +406,13 @@ export function AutomataEditor(props) {
                 <Picker.Item label="R" value="R" />
               </Picker>
             )}
-            <Button
-              style={styles.labelInputAction}
-              title="Remove"
-              onPress={onRemoveTransition}
-            />
+            {editing.type !== 'node' && (
+              <Button
+                style={styles.labelInputAction}
+                title="Remove"
+                onPress={onRemoveTransition}
+              />
+            )}
           </View>
         </View>
       )}
