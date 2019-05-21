@@ -86,9 +86,12 @@ export function isConfigAccepted(finalStates: Set<string>, config: AutomataConfi
 export function resolveConfig(
   transitions:AutomataTransitions,
   configuration: AutomataConfiguration,
-  finalStates: Set<string>
+  finalStates: Set<string>,
+  // TODO: this should be a generic
+  stepFn: (transitions: AutomataTransitions, configuration: any) => Array<any> = step,
+  isConfigAcceptedFn: (finalStates: Set<string>, config: any) => boolean = isConfigAccepted
 ) {
-  const lIsConfigAccepted = (config: AutomataConfiguration) => isConfigAccepted(finalStates, config)
+  const lIsConfigAccepted = (config: AutomataConfiguration) => isConfigAcceptedFn(finalStates, config)
   let configs = [configuration]
 
   do {
@@ -98,7 +101,7 @@ export function resolveConfig(
       }
     }
 
-    configs = flatten(configs.map(c => step(transitions, c)))
+    configs = flatten(configs.map(c => stepFn(transitions, c)))
   } while (configs.length !== 0)
 
   return null
