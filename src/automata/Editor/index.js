@@ -263,6 +263,8 @@ export function AutomataEditor(props) {
       props.transitions.set(addedEles.id(), {
         id: addedEles.id(),
         label: addedEles.label,
+        left: BLANK_CODE,
+        right: 'R',
         source: { data: sourceNode.data() },
         target: { data: targetNode.data() }
       })
@@ -398,7 +400,7 @@ export function AutomataEditor(props) {
             {editing.type !== 'node' && (
               <Picker
                 ref={inputElRight}
-                selectedValue={editing.valueRight || 'L'}
+                selectedValue={editing.valueRight || 'R'}
                 onValueChange={onTMDirectionChange}
                 style={styles.labelInput}
               >
