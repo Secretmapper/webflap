@@ -2,6 +2,7 @@ import {
   AutomataConfiguration,
   AutomataTransitions,
   initialConfig as automataInitialConfig,
+  resolveConfig as resolveConfigRaw,
   BLANK_CODE
 } from './index'
 
@@ -90,4 +91,16 @@ export function step (
   })
 
   return configs
+}
+
+export function isConfigAccepted(finalStates: Set<string>, config: AutomataConfiguration) {
+  return (finalStates.has(config.state.data.id))
+}
+
+export function resolveConfig(
+  transitions: AutomataTransitions,
+  configuration: AutomataConfiguration,
+  finalStates: Set<string>,
+) {
+  return resolveConfigRaw(transitions, configuration, finalStates, step, isConfigAccepted)
 }

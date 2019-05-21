@@ -5,8 +5,7 @@ import Editor from './Editor'
 import ZoomedModal from './ZoomedModal'
 import Instructions from './Instructions'
 import Controls from './Controls'
-import { resolveConfig } from './helpers'
-import { initialConfig, step } from './helpers/tm'
+import { resolveConfig, initialConfig, step } from './helpers/tm'
 import { useSavedAutomata, useSaveAsImage } from './hooks'
 
 export default function Automata() {
