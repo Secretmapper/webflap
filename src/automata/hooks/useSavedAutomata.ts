@@ -37,14 +37,33 @@ type UseSavedAutomataArray = [
 ]
 
 function serializeTransitionMap (map: Map<string, Transition>) {
-  // TODO: currently, transitions is NOT normalized, and state data is saved along with transitions
-
   return JSON.stringify(
     Array
       .from(map)
-      // .map(([k, v]) => [k, { ...v, source: v.source.data.id, target: v.target.data.id }])
+      .map(([k, v]) => [k, { ...v, source: v.source.data.id, target: v.target.data.id }])
   )
 }
+
+function deserializeTransitionMap (transitionsString: string, statesMap: Map<string, any>): Map<string, Transition> {
+  const transitionsArray = JSON.parse(transitionsString)
+
+  // link transitions with states
+  const transitions = new Map(
+    transitionsArray.map(([k, v]: [string, any]) => {
+      return [
+        k,
+        {
+          ...v,
+          source: statesMap.get(v.source),
+          target: statesMap.get(v.target)
+        }
+      ]
+    })
+  )
+
+  return transitions as Map<string, Transition>
+}
+
 function serializeFinalStates (finalStates: Set<string>) {
   return JSON.stringify(Array.from(finalStates))
 }
@@ -68,19 +87,6 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
   )
 
   const states = useMemo(() => JSON.parse(statesString), [statesString])
-  const transitions = useMemo(() => new Map(JSON.parse(transitionsString)) as Map<string, Transition>, [
-    transitionsString
-  ])
-  const finalStates = useMemo(() => new Set(JSON.parse(finalStatesString)) as Set<string>, [
-    finalStatesString
-  ])
-  // XXX: we're currently mutating these things directly, but ideally that is immutable
-  const setTransitions = useCallback(() => {
-    setTransitionsString(serializeTransitionMap(transitions))
-  }, [])
-  const setFinalStates = useCallback(() => {
-    setFinalStatesString(serializeFinalStates(finalStates))
-  }, [])
 
   const setStates = useCallback(
     nodes => {
@@ -99,38 +105,59 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
     setMultipleInputString(JSON.stringify(input))
   ), [setMultipleInputString])
 
-  const elements = useMemo(
+  const {
+    elements,
+    transitions,
+    finalStates
+  } = useMemo(
     () => {
-      const statesMap = new Map(states)
+      const statesMap: Map<string, any> = new Map(states)
       states.map((o: any) => statesMap.set(o.data.id, o))
 
-      const filteredTransitions = Array
-        .from(transitions.values())
-        .filter(transition => statesMap.has(transition.source.data.id) && statesMap.has(transition.target.data.id))
+      const transitions = deserializeTransitionMap(transitionsString, statesMap) as Map<string, Transition>
+      const finalStates = new Set(JSON.parse(finalStatesString)) as Set<string>
 
-      return [
-        ...states.map((state: any) => ({
-          ...state,
-          classes: [
-            'dfa__state',
-            initialState === state.data.id ? 'dfa__state--initial' : '',
-            finalStates.has(state.data.id) ? 'dfa__state--final' : ''
-          ]
-        })),
-        ...filteredTransitions.map((trans: any) => ({
-          data: {
-            ...trans,
-            id: trans.id,
-            source: trans.source.data.id,
-            target: trans.target.data.id,
-            label: makeTMTransitionLabel(trans)
-          },
-          classes: 'autorotate'
-        }))
-      ]
+      for (let [k, v] of transitions) {
+        if (!v.source || !v.target) {
+          transitions.delete(k)
+        }
+      }
+
+      return {
+        transitions,
+        finalStates,
+        elements: [
+          ...states.map((state: any) => ({
+            ...state,
+            classes: [
+              'dfa__state',
+              initialState === state.data.id ? 'dfa__state--initial' : '',
+              finalStates.has(state.data.id) ? 'dfa__state--final' : ''
+            ]
+          })),
+          ...Array.from(transitions.values()).map((trans: any) => ({
+            data: {
+              ...trans,
+              id: trans.id,
+              source: trans.source.data.id,
+              target: trans.target.data.id,
+              label: makeTMTransitionLabel(trans)
+            },
+            classes: 'autorotate'
+          }))
+        ]
+      }
     },
     []
   )
+
+  // XXX: we're currently mutating these things directly, but ideally that is immutable
+  const setTransitions = useCallback(() => {
+    setTransitionsString(serializeTransitionMap(transitions))
+  }, [])
+  const setFinalStates = useCallback(() => {
+    setFinalStatesString(serializeFinalStates(finalStates))
+  }, [])
 
   return [
     elements,
