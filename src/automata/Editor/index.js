@@ -262,7 +262,7 @@ export function AutomataEditor(props) {
       // TODO: Have all these data handled in one place
       props.transitions.set(addedEles.id(), {
         id: addedEles.id(),
-        label: addedEles.label,
+        label: addedEles.label || BLANK_CODE,
         left: BLANK_CODE,
         right: 'R',
         source: { data: sourceNode.data() },
