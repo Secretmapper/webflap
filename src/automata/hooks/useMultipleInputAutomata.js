@@ -35,7 +35,6 @@ function useMultipleInputAutomata({
     setMultipleInputConfigs(
       multipleInputConfigs.map((input, i) => {
         if (index === i) {
-          console.log(index, i, input)
           const { resolver } = input
           const { value, done } = resolver.next()
 

@@ -50,7 +50,7 @@ MultipleInput.defaultProps = {
 }
 
 function Row(props: RowProps) {
-  const accepted = props.config && props.config.done
+  const accepted = props.config && (props.config.value && props.config.done)
   const loading = false
 
   const touchableRef = useRef(null)
