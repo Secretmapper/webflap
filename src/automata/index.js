@@ -31,15 +31,7 @@ export default function Automata() {
 
   // TODO: un-state-ify this and memoize instead
   const [configs, setConfigs] = useState([initialConfig(initialState)])
-  const [multipleInputConfigs, setMultipleInputConfigs] = useState(
-    multipleInput.map(input =>
-      resolveConfig(
-        transitions,
-        initialConfig(initialState, input),
-        finalStates
-      )
-    )
-  )
+  const [multipleInputConfigs, setMultipleInputConfigs] = useState([])
 
   const [rejectedConfigs, setRejectedConfigs] = useState([])
   const [configBeingHovered, setConfigBeingHovered] = useState(null)
@@ -62,16 +54,21 @@ export default function Automata() {
   }
   const onSetMultipleInput = value => {
     setMultipleInput(value)
-    setMultipleInputConfigs(
-      value.map(input =>
-        resolveConfig(
-          transitions,
-          initialConfig(initialState, input),
-          finalStates
+  }
+  const onRunMultipleInput = useCallback(
+    e => {
+      setMultipleInputConfigs(
+        multipleInput.map(input =>
+          resolveConfig(
+            transitions,
+            initialConfig(initialState, input),
+            finalStates
+          )
         )
       )
-    )
-  }
+    },
+    [multipleInput, setMultipleInputConfigs]
+  )
   const onConfigHover = (config, hoveringIn) => {
     if (hoveringIn) {
       setConfigBeingHovered(config)
@@ -145,6 +142,7 @@ export default function Automata() {
           saveAsImage={saveAsImage}
           multipleInput={multipleInput}
           setMultipleInput={onSetMultipleInput}
+          runMultipleInput={onRunMultipleInput}
           multipleInputConfigs={multipleInputConfigs}
           openModal={() => setShowModal(true)}
         />

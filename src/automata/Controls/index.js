@@ -90,6 +90,7 @@ export default function Controls(props) {
         {tab === 'multipleRun' && (
           <React.Fragment>
             <NavButton title="Load Inputs" onPress={() => setShowModal(true)} />
+            <NavButton title="Run Inputs" onPress={props.runMultipleInput} />
             <MultipleInput
               strings={multipleInput}
               configs={multipleInputConfigs}
