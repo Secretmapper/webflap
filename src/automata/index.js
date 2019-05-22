@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import flatten from 'lodash.flatten'
 import Layout from './Layout'
 import Editor from './Editor'
@@ -7,30 +7,14 @@ import Instructions from './Instructions'
 import Samples from './Samples'
 import Controls from './Controls'
 import { lazyResolveConfig, initialConfig, step } from './helpers/tm'
-import { SECRET_KEY, COLLECTION_ID } from './hooks/creds'
 import {
   useMultipleInputAutomata,
-  useSavedAutomataLocalStorage as useSavedAutomata,
+  useSavedAutomataState,
+  useSavedAutomataLocalStorage,
   useSaveAsImage
 } from './hooks'
 
 export default function Automata(props) {
-  useEffect(
-    () => {
-      fetch(`https://api.jsonbin.io/b/${props.match.params.id}/latest`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'secret-key': SECRET_KEY,
-          'collection-id': COLLECTION_ID,
-          private: false
-        }
-      })
-        .then(res => res.json())
-        .then(console.log)
-    },
-    [props.match.params.id]
-  )
-
   const [viewOtherFiles, setViewOtherFiles] = useState(false)
   const { showModal, setShowModal } = props
   const onViewInstructions = useCallback(
@@ -48,7 +32,10 @@ export default function Automata(props) {
     [setViewOtherFiles]
   )
 
-  const cyRef = useRef(null)
+  const saveHook = props.initialStateData
+    ? useSavedAutomataState(props.initialStateData)
+    : useSavedAutomataLocalStorage()
+
   const [
     initialElements,
     initialState,
@@ -63,7 +50,8 @@ export default function Automata(props) {
     multipleInput,
     setMultipleInput,
     onShare
-  ] = useSavedAutomata()
+  ] = saveHook
+  const cyRef = useRef(null)
 
   const [layout, setLayout] = useState(undefined)
 

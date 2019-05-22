@@ -7,15 +7,17 @@ import {
   transitions as transitionsFixture
 } from '../tm.fixtures'
 
-function useSavedAutomataState () {
+const defaultData = {
+  statesDefault: JSON.stringify(Array.from(statesFixture.values())),
+  transitionsDefault: serializeTransitionMap(transitionsFixture),
+  finalStatesDefault: serializeFinalStates(finalStatesFixture),
+  initialStateDefault: initialStateFixture
+}
+
+function useSavedAutomataState (initialData: any) {
   return useSavedAutomata(
     (k, v) => useState(v),
-    {
-      statesDefault: JSON.stringify(Array.from(statesFixture.values())),
-      transitionsDefault: serializeTransitionMap(transitionsFixture),
-      finalStatesDefault: serializeFinalStates(finalStatesFixture),
-      initialStateDefault: initialStateFixture
-    }
+    initialData || defaultData
   )
 }
 

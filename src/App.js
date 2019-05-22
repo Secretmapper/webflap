@@ -3,6 +3,7 @@ import nanoid from 'nanoid'
 import { Route } from 'react-router'
 import { BrowserRouter } from 'react-router-dom'
 import Automata from './automata'
+import APILoadableAutomata from './automata/APILoadableAutomata'
 
 // TODO: Refactor (handle this in one place)
 function App() {
@@ -38,18 +39,7 @@ function App() {
           />
         )}
       />
-      <Route
-        path="/diagram/:id"
-        render={props => (
-          <Automata
-            {...props}
-            key={key}
-            onLoadFile={onLoadFile}
-            showModal={showModal}
-            setShowModal={setShowModal}
-          />
-        )}
-      />
+      <Route path="/diagram/:id" component={APILoadableAutomata} />
     </BrowserRouter>
   )
 }
