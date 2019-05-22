@@ -92,7 +92,7 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
   const [initialState, setInitialState] = useLocalStorage('editor__initialState', initialStateFixture)
 
   /** inputs **/
-  const [inputString, setInputString] = useState('bc')
+  const [inputString, setInputString] = useState('')
   const [multipleInputString, setMultipleInputString] = useLocalStorage('editor__multipleInput', '[]')
   const multipleInput = useMemo(() => JSON.parse(multipleInputString), [multipleInputString])
   const setMultipleInput = useCallback((input) => (

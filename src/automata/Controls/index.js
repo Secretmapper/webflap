@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { StyleSheet, Button, Picker, View } from 'react-native'
 import Modal from 'modal-enhanced-react-native-web'
 import Heading from '../../core/Heading'
@@ -15,7 +15,6 @@ export default function Controls(props) {
   const {
     inputString,
     onInputStringChange,
-    onPlay,
     onNext,
 
     finalStates,
@@ -42,6 +41,15 @@ export default function Controls(props) {
     onInputStringChange({ target: { value } })
     setTab('stepByStep')
   }
+
+  const [isStepByStepStarted, setIsStepByStepStarted] = useState(false)
+  const onPlay = useCallback(
+    () => {
+      setIsStepByStepStarted(true)
+      props.onPlay()
+    },
+    [props.setIsStepByStepStarted, props.onPlay]
+  )
 
   return (
     <View style={styles.side}>
@@ -117,16 +125,19 @@ export default function Controls(props) {
             <StepByStepControls
               inputString={inputString}
               onInputStringChange={onInputStringChange}
+              isStepByStepStarted={isStepByStepStarted}
               onPlay={onPlay}
               onNext={onNext}
             />
-            <Configurations
-              type="tm"
-              finalStates={finalStates}
-              rejected={rejectedConfigs}
-              configurations={configs}
-              onConfigHover={onConfigHover}
-            />
+            {isStepByStepStarted && (
+              <Configurations
+                type="tm"
+                finalStates={finalStates}
+                rejected={rejectedConfigs}
+                configurations={configs}
+                onConfigHover={onConfigHover}
+              />
+            )}
           </React.Fragment>
         )}
       </View>
