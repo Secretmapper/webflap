@@ -94,6 +94,7 @@ export default function Controls(props) {
             <MultipleInput
               strings={multipleInput}
               configs={multipleInputConfigs}
+              continueConfig={props.continueConfig}
               onConfigHover={onConfigHover}
               onInputPress={onInputPress}
             />

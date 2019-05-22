@@ -35,7 +35,11 @@ export default function Automata() {
 
   // TODO: un-state-ify this and memoize instead
   const [configs, setConfigs] = useState([initialConfig(initialState)])
-  const [multipleInputConfigs, onRunMultipleInput] = useMultipleInputAutomata({
+  const [
+    multipleInputConfigs,
+    onRunMultipleInput,
+    continueConfig
+  ] = useMultipleInputAutomata({
     finalStates,
     initialConfig,
     initialState,
@@ -133,6 +137,7 @@ export default function Automata() {
           finalStates={finalStates}
           rejectedConfigs={rejectedConfigs}
           configs={configs}
+          continueConfig={continueConfig}
           onConfigHover={onConfigHover}
           layout={layout}
           setLayout={setLayout}

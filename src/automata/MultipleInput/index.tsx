@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { PulseLoader } from 'react-spinners'
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native'
+import Panel from './Panel'
 import useHover from '../../core/hooks/useHover'
 
 type Config = {
@@ -11,13 +12,16 @@ type Config = {
 type Props = {
   strings: Array<string>,
   configs: Array<Config>,
-  onConfigHover: Function
+  continueConfig: (index: number) => void,
+  onConfigHover: Function,
   onInputPress: Function
 }
 
 type RowProps = {
   string: string,
   config: Config,
+  configIndex: number,
+  continueConfig: (index: number) => void,
   onHover: Function,
   onInputPress: Function
 }
@@ -29,7 +33,9 @@ function MultipleInput(props: Props) {
         <Row
           key={string}
           string={string}
+          configIndex={i}
           config={props.configs[i]}
+          continueConfig={props.continueConfig}
           onHover={props.onConfigHover}
           onInputPress={props.onInputPress}
         />
@@ -44,12 +50,19 @@ MultipleInput.defaultProps = {
 }
 
 function Row(props: RowProps) {
+  const accepted = props.config && props.config.done
+  const loading = false
+
   const touchableRef = useRef(null)
   const [isHovered, setIsHovered] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
   useHover(touchableRef, (hovering: any) => {
-    setIsHovered(hovering)
-    if (props.config && props.config.done) {
-      props.onHover(props.config.value, hovering)
+    if (props.config) {
+      setIsHovered(hovering)
+
+      if (props.config.done) {
+        props.onHover(props.config.value, hovering)
+      }
     }
   })
   useEffect(
@@ -61,42 +74,56 @@ function Row(props: RowProps) {
     ['once']
   )
   const onPress = useCallback(() => {
+    setIsExpanded(b => !b)
+  }, [setIsExpanded])
+  const onSimulateStepByStep = useCallback(() => {
     props.onInputPress(props.string)
   }, [props.onInputPress])
-
-  const accepted = props.config && props.config.done
-  const loading = false
+  const onContinue = useCallback(() => {
+    props.continueConfig(props.configIndex)
+  }, [props.config, props.continueConfig, props.configIndex])
 
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View
-        ref={touchableRef}
-        style={[
-          styles.row,
-          accepted && styles.rowAccepted,
-          !accepted && styles.rowRejected,
-          accepted && isHovered && styles.rowHoveredAccepted,
-          !accepted && isHovered && styles.rowHoveredRejected
-        ]}
-      >
-        <Text>{props.string}</Text>
-        <View>
-          <RowStatusIcon
-            config={props.config}
-          />
-          {loading && (
-            <View style={styles.loadingContainer}>
-              <PulseLoader
-                color="rgba(0, 0, 0, 1)"
-                loading
-                size={4}
-                sizeUnit={'px'}
-              />
-            </View>
-          )}
+    <View>
+      <TouchableOpacity onPress={onPress}>
+        <View
+          ref={touchableRef}
+          data-for={`pause-warning-${props.string}`}
+          data-tip
+          style={[
+            styles.row,
+            accepted && styles.rowAccepted,
+            !accepted && styles.rowRejected,
+            accepted && isHovered && styles.rowHoveredAccepted,
+            !accepted && isHovered && styles.rowHoveredRejected
+          ]}
+        >
+          <Text>{props.string}</Text>
+          <View>
+            <RowStatusIcon
+              config={props.config}
+            />
+            {loading && (
+              <View style={styles.loadingContainer}>
+                <PulseLoader
+                  color="rgba(0, 0, 0, 1)"
+                  loading
+                  size={4}
+                  sizeUnit={'px'}
+                />
+              </View>
+            )}
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+      {isExpanded && (
+        <Panel
+          config={props.config}
+          onContinue={onContinue as any}
+          onSimulateStepByStep={onSimulateStepByStep as any}
+        />
+      )}
+    </View>
   )
 }
 

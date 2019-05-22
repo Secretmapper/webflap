@@ -31,8 +31,27 @@ function useMultipleInputAutomata({
     },
     [multipleInput, setMultipleInputConfigs]
   )
+  const continueConfig = useCallback(index => {
+    setMultipleInputConfigs(
+      multipleInputConfigs.map((input, i) => {
+        if (index === i) {
+          console.log(index, i, input)
+          const { resolver } = input
+          const { value, done } = resolver.next()
 
-  return [multipleInputConfigs, onRunMultipleInput]
+          return {
+            resolver,
+            value,
+            done
+          }
+        } else {
+          return input
+        }
+      })
+    )
+  })
+
+  return [multipleInputConfigs, onRunMultipleInput, continueConfig]
 }
 
 export default useMultipleInputAutomata

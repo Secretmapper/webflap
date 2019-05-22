@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
   side: {
     flexDirection: 'column',
     flexShrink: 0,
-    width: 250
+    width: 250,
+    zIndex: 2
   }
 })
