@@ -17,7 +17,12 @@ function TapeCell (props: CellProps) {
       styles.cell,
       props.current && styles.cellHighlighted
     ]}>
-      <Text style={styles.cellText}>{props.value}</Text>
+      <Text style={[
+        styles.cellText,
+        props.current && styles.cellTextHighlighted
+      ]}>
+        {props.value}
+      </Text>
     </View>
   )
 }
@@ -62,8 +67,12 @@ const styles = StyleSheet.create({
   cellText: {
     textAlign: 'center'
   },
+  cellTextHighlighted: {
+    color: 'white',
+    textAlign: 'center'
+  },
   cellHighlighted: {
-    backgroundColor: 'rgba(255,255,200,1)'
+    backgroundColor: 'black'
   }
 })
 
