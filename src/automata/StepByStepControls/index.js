@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Button, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Button, TextInput, View } from 'react-native'
 
 export default function Controls(props) {
   return (
