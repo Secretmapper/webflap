@@ -6,7 +6,11 @@ import ZoomedModal from './ZoomedModal'
 import Instructions from './Instructions'
 import Controls from './Controls'
 import { resolveConfig, initialConfig, step } from './helpers/tm'
-import { useSavedAutomata, useSaveAsImage } from './hooks'
+import {
+  useMultipleInputAutomata,
+  useSavedAutomata,
+  useSaveAsImage
+} from './hooks'
 
 export default function Automata() {
   const [showModal, setShowModal] = useState(false)
@@ -31,7 +35,14 @@ export default function Automata() {
 
   // TODO: un-state-ify this and memoize instead
   const [configs, setConfigs] = useState([initialConfig(initialState)])
-  const [multipleInputConfigs, setMultipleInputConfigs] = useState([])
+  const [multipleInputConfigs, onRunMultipleInput] = useMultipleInputAutomata({
+    finalStates,
+    initialConfig,
+    initialState,
+    multipleInput,
+    resolveConfig,
+    transitions
+  })
 
   const [rejectedConfigs, setRejectedConfigs] = useState([])
   const [configBeingHovered, setConfigBeingHovered] = useState(null)
@@ -55,20 +66,6 @@ export default function Automata() {
   const onSetMultipleInput = value => {
     setMultipleInput(value)
   }
-  const onRunMultipleInput = useCallback(
-    e => {
-      setMultipleInputConfigs(
-        multipleInput.map(input =>
-          resolveConfig(
-            transitions,
-            initialConfig(initialState, input),
-            finalStates
-          )
-        )
-      )
-    },
-    [multipleInput, setMultipleInputConfigs]
-  )
   const onConfigHover = (config, hoveringIn) => {
     if (hoveringIn) {
       setConfigBeingHovered(config)
