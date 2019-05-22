@@ -1,12 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
-import useLocalStorage from 'react-use-localstorage'
 import { makeTMTransitionLabel } from '../helpers'
-import {
-  initialState as initialStateFixture,
-  finalStates as finalStatesFixture,
-  states as statesFixture,
-  transitions as transitionsFixture
-} from '../tm.fixtures'
+import { SECRET_KEY, COLLECTION_ID } from './creds'
+import wwFixture from '../Samples/w#w.fixture'
 
 type Transition = { id: string, source: any, target: any, left: string, label: string, right: string }
 type UseSavedAutomataArray = [
@@ -33,10 +28,12 @@ type UseSavedAutomataArray = [
   // multipleInput
   Array<string>,
   // setMultipleInput
+  Function,
+  // onShare
   Function
 ]
 
-function serializeTransitionMap (map: Map<string, Transition>) {
+export function serializeTransitionMap (map: Map<string, Transition>) {
   return JSON.stringify(
     Array
       .from(map)
@@ -64,26 +61,32 @@ function deserializeTransitionMap (transitionsString: string, statesMap: Map<str
   return transitions as Map<string, Transition>
 }
 
-function serializeFinalStates (finalStates: Set<string>) {
+export function serializeFinalStates (finalStates: Set<string>) {
   return JSON.stringify(Array.from(finalStates))
 }
 
-const statesFixtureString = JSON.stringify(Array.from(statesFixture.values()))
-const transitionsFixtureString = serializeTransitionMap(transitionsFixture)
-const finalStatesFixtureString = serializeFinalStates(finalStatesFixture)
+export default function useSavedAutomata(
+  useStorage: (key: string, v: string) => any,
+  defaults: { statesDefault: string, transitionsDefault: string, finalStatesDefault: string, initialStateDefault: string }
+): UseSavedAutomataArray {
+  const {
+    statesDefault,
+    transitionsDefault,
+    finalStatesDefault,
+    initialStateDefault
+  } = defaults
 
-export default function useSavedAutomata(): UseSavedAutomataArray {
-  const [statesString, setStatesString] = useLocalStorage(
+  const [statesString, setStatesString] = useStorage(
     'editor__states',
-    statesFixtureString
+    statesDefault
   )
-  const [transitionsString, setTransitionsString] = useLocalStorage(
+  const [transitionsString, setTransitionsString] = useStorage(
     'editor__transitions',
-    transitionsFixtureString
+    transitionsDefault
   )
-  const [finalStatesString, setFinalStatesString] = useLocalStorage(
+  const [finalStatesString, setFinalStatesString] = useStorage(
     'editor__finalStates',
-    finalStatesFixtureString
+    finalStatesDefault
   )
 
   const states = useMemo(() => JSON.parse(statesString), [statesString])
@@ -95,11 +98,11 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
     [states]
   )
 
-  const [initialState, setInitialState] = useLocalStorage('editor__initialState', initialStateFixture)
+  const [initialState, setInitialState] = useStorage('editor__initialState', initialStateDefault)
 
   /** inputs **/
   const [inputString, setInputString] = useState('')
-  const [multipleInputString, setMultipleInputString] = useLocalStorage('editor__multipleInput', '[]')
+  const [multipleInputString, setMultipleInputString] = useStorage('editor__multipleInput', '[]')
   const multipleInput = useMemo(() => JSON.parse(multipleInputString), [multipleInputString])
   const setMultipleInput = useCallback((input) => (
     setMultipleInputString(JSON.stringify(input))
@@ -159,6 +162,31 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
     setFinalStatesString(serializeFinalStates(finalStates))
   }, [])
 
+  const onShare = () => {
+    const data = JSON.stringify({
+      'type': 'tm',
+      'initial': initialState,
+      'final': serializeFinalStates(finalStates),
+      states: statesString,
+      transitions: serializeTransitionMap(transitions),
+      multipleInput: multipleInputString
+    })
+
+    fetch('https://api.jsonbin.io/b', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        'secret-key': SECRET_KEY,
+        'collection-id':	COLLECTION_ID,
+        'private': false
+      } as any,
+      body: data
+    })
+    .then((res) => res.json())
+    .then(console.log)
+  }
+
   return [
     elements,
     initialState,
@@ -171,6 +199,7 @@ export default function useSavedAutomata(): UseSavedAutomataArray {
     inputString,
     setInputString,
     multipleInput,
-    setMultipleInput
+    setMultipleInput,
+    onShare
   ]
 }
