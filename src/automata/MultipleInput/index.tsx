@@ -1,9 +1,26 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { PulseLoader } from 'react-spinners'
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native'
 import useHover from '../../core/hooks/useHover'
 
-export default function MultipleInput(props) {
+type Config = {
+}
+
+type Props = {
+  strings: Array<string>,
+  configs: Array<Config>,
+  onConfigHover: Function
+  onInputPress: Function
+}
+
+type RowProps = {
+  string: string,
+  config: Config,
+  onHover: Function,
+  onInputPress: Function
+}
+
+function MultipleInput(props: Props) {
   return (
     <View>
       {props.strings.map((string, i) => (
@@ -19,10 +36,15 @@ export default function MultipleInput(props) {
   )
 }
 
-function Row(props) {
+MultipleInput.defaultProps = {
+  onHover: () => {},
+  onInputPress: () => {}
+}
+
+function Row(props: RowProps) {
   const touchableRef = useRef(null)
   const [isHovered, setIsHovered] = useState(false)
-  useHover(touchableRef, hovering => {
+  useHover(touchableRef, (hovering: any) => {
     setIsHovered(hovering)
     props.onHover(props.config, hovering)
   })
@@ -34,11 +56,15 @@ function Row(props) {
     },
     ['once']
   )
+  const onPress = useCallback(() => {
+    props.onInputPress(props.string)
+  }, [props.onInputPress])
 
   const accepted = !!props.config
+  const loading = false
 
   return (
-    <TouchableOpacity onPress={() => props.onInputPress(props.string)}>
+    <TouchableOpacity onPress={onPress}>
       <View
         ref={touchableRef}
         style={[
@@ -50,7 +76,7 @@ function Row(props) {
         ]}
       >
         <Text>{props.string}</Text>
-        {props.loading && (
+        {loading && (
           <View style={styles.loadingContainer}>
             <PulseLoader
               color="rgba(0, 0, 0, 1)"
@@ -64,6 +90,8 @@ function Row(props) {
     </TouchableOpacity>
   )
 }
+
+export default MultipleInput
 
 const styles = StyleSheet.create({
   row: {
