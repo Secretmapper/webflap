@@ -20,11 +20,7 @@ function Sample (props: SampleProps) {
           props.selected && styles.sampleSelected
         ]}
       >
-        <Image
-          style={styles.sampleImg}
-          source={{ uri: props.sample.uri }}
-        />
-        <View style={styles.title}>
+        <div style={webstyles.title}>
           <MathJax.Context
             input='ascii'
             script='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=AM_HTMLorMML'
@@ -38,7 +34,7 @@ function Sample (props: SampleProps) {
           >
             <MathJax.Text text={props.sample.text}/>
           </MathJax.Context>
-        </View>
+        </div>
       </View>
     </TouchableOpacity>
   )
@@ -47,16 +43,19 @@ function Sample (props: SampleProps) {
 const styles = StyleSheet.create({
   sample: {
     cursor: 'pointer',
-    shadowOffset: { width: 0, height: 1 },
+    borderColor: 'rgba(0,0,0,0)',
+    borderWidth: 0,
+    borderLeftWidth: 3,
+    shadowOffset: { width: 0, height: 0 },
     shadowColor: 'black',
     shadowOpacity: 0.2,
-    shadowRadius: 3,
+    shadowRadius: 1,
     marginRight: 16,
-    width: 200
   },
   sampleSelected: {
     borderColor: '#5895F0',
-    borderWidth: 3,
+    borderWidth: 0,
+    borderLeftWidth: 3,
     boxSizing: 'border-box',
     overflow: 'hidden'
   },
@@ -66,13 +65,16 @@ const styles = StyleSheet.create({
     height: 200,
     width: 200
   },
-  title: {
-    textAlign: 'center',
-    padding: 8
-  },
   text: {
     marginBottom: 8
   },
 })
+
+const webstyles = {
+  title: {
+    fontSize: 12,
+    padding: 4
+  }
+}
 
 export default Sample

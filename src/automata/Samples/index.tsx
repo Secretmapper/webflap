@@ -27,6 +27,11 @@ export function Samples (props: Props) {
     <View style={styles.container}>
       <View style={styles.samplesWindow}>
         <Text style={styles.heading}>
+          My Files
+        </Text>
+        <View style={styles.samples}>
+        </View>
+        <Text style={styles.heading}>
           Turing Machine Examples
         </Text>
         <View style={styles.samples}>
@@ -54,7 +59,7 @@ const styles = StyleSheet.create({
   samplesWindow: {
   },
   samples: {
-    flexDirection: 'row'
+    // flexDirection: 'row'
   },
   text: {
     marginBottom: 8
@@ -65,8 +70,7 @@ const styles = StyleSheet.create({
   actions: {
     justifyContent: 'flex-end',
     flexDirection: 'row',
-    marginTop: 8,
-    textAlign: 'center'
+    marginTop: 8
   },
   cancelBtn: {
     marginRight: 8

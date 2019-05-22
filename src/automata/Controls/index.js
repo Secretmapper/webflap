@@ -144,7 +144,13 @@ export default function Controls(props) {
       {tab !== null && (
         <NavButton color="#9e9e9e" title="Back" onPress={() => setTab(null)} />
       )}
-      <Links openModal={props.openModal} />
+      {tab === null && (
+        <NavButton
+          title="Open Files/Examples"
+          onPress={props.onViewOtherFiles}
+        />
+      )}
+      <Links onViewInstructions={props.onViewInstructions} />
     </View>
   )
 }

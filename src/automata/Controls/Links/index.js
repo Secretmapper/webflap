@@ -17,7 +17,7 @@ function Links(props) {
       <View ref={howToUseRef} style={styles.linkContainer}>
         <Text
           style={[styles.link, howToUseHover && styles.linkHover]}
-          onPress={props.openModal}
+          onPress={props.onViewInstructions}
         >
           How to use
         </Text>

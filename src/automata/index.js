@@ -4,6 +4,7 @@ import Layout from './Layout'
 import Editor from './Editor'
 import ZoomedModal from './ZoomedModal'
 import Instructions from './Instructions'
+import Samples from './Samples'
 import Controls from './Controls'
 import { lazyResolveConfig, initialConfig, step } from './helpers/tm'
 import {
@@ -14,6 +15,21 @@ import {
 
 export default function Automata() {
   const [showModal, setShowModal] = useState(false)
+  const [viewOtherFiles, setViewOtherFiles] = useState(false)
+  const onViewInstructions = useCallback(
+    () => {
+      setShowModal(true)
+      setViewOtherFiles(false)
+    },
+    [setShowModal, setViewOtherFiles]
+  )
+  const onViewOtherFiles = useCallback(
+    () => {
+      setShowModal(true)
+      setViewOtherFiles(true)
+    },
+    [setViewOtherFiles]
+  )
 
   const cyRef = useRef(null)
   const [
@@ -124,7 +140,13 @@ export default function Automata() {
               configHovered={configBeingHovered}
             />
           }
-          modal={<Instructions onClose={() => setShowModal(false)} />}
+          modal={
+            viewOtherFiles ? (
+              <Samples />
+            ) : (
+              <Instructions onClose={() => setShowModal(false)} />
+            )
+          }
           showModal={showModal}
         />
       }
@@ -146,7 +168,8 @@ export default function Automata() {
           setMultipleInput={onSetMultipleInput}
           runMultipleInput={onRunMultipleInput}
           multipleInputConfigs={multipleInputConfigs}
-          openModal={() => setShowModal(true)}
+          onViewInstructions={onViewInstructions}
+          onViewOtherFiles={onViewOtherFiles}
         />
       }
     />

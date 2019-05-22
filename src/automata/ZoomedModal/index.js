@@ -49,6 +49,8 @@ const styles = StyleSheet.create({
     left: '50%',
     transform: [{ translateX: '-50%' }, { translateY: '-50%' }],
     maxWidth: 800,
+    maxHeight: '90%',
+    overflow: 'scroll',
     width: '90%'
   }
 })
