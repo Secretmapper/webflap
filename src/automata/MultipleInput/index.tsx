@@ -4,6 +4,8 @@ import { StyleSheet, TouchableOpacity, View, Text } from 'react-native'
 import useHover from '../../core/hooks/useHover'
 
 type Config = {
+  done: boolean,
+  value: any
 }
 
 type Props = {
@@ -46,12 +48,14 @@ function Row(props: RowProps) {
   const [isHovered, setIsHovered] = useState(false)
   useHover(touchableRef, (hovering: any) => {
     setIsHovered(hovering)
-    props.onHover(props.config, hovering)
+    if (props.config && props.config.done) {
+      props.onHover(props.config.value, hovering)
+    }
   })
   useEffect(
     () => {
       return () => {
-        props.onHover(props.config, false)
+        props.onHover(null, false)
       }
     },
     ['once']
@@ -60,7 +64,7 @@ function Row(props: RowProps) {
     props.onInputPress(props.string)
   }, [props.onInputPress])
 
-  const accepted = !!props.config
+  const accepted = props.config && props.config.done
   const loading = false
 
   return (
@@ -76,19 +80,38 @@ function Row(props: RowProps) {
         ]}
       >
         <Text>{props.string}</Text>
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <PulseLoader
-              color="rgba(0, 0, 0, 1)"
-              loading
-              size={4}
-              sizeUnit={'px'}
-            />
-          </View>
-        )}
+        <View>
+          <RowStatusIcon
+            config={props.config}
+          />
+          {loading && (
+            <View style={styles.loadingContainer}>
+              <PulseLoader
+                color="rgba(0, 0, 0, 1)"
+                loading
+                size={4}
+                sizeUnit={'px'}
+              />
+            </View>
+          )}
+        </View>
       </View>
     </TouchableOpacity>
   )
+}
+
+type RowStatusIconProps = {
+  config: any
+}
+
+function RowStatusIcon (props: RowStatusIconProps) {
+  if (props.config && !props.config.done) {
+    return (
+      <Text>!</Text>
+    )
+  }
+
+  return (<React.Fragment />)
 }
 
 export default MultipleInput

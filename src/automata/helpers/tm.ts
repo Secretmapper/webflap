@@ -104,3 +104,52 @@ export function resolveConfig(
 ) {
   return resolveConfigRaw(transitions, configuration, finalStates, step, isConfigAccepted)
 }
+
+/**
+ * Lazily resolves configuration
+ *
+ * @remarks
+ * TODO: Needs to have a dfa version
+ */
+export function* lazyResolveConfig(
+  transitions:AutomataTransitions,
+  configuration: AutomataConfiguration,
+  finalStates: Set<string>,
+  // count of configurations each iteration to 'pause' at
+  configSteps: number = 100,
+  // TODO: this should be a generic
+  stepFn: (transitions: AutomataTransitions, configuration: any) => Array<any> = step,
+  isConfigAcceptedFn: (finalStates: Set<string>, config: any) => boolean = isConfigAccepted
+) {
+  const lIsConfigAccepted = (config: AutomataConfiguration) => isConfigAcceptedFn(finalStates, config)
+  let configs: Array<any> = [configuration]
+
+  let stepIterations = 1
+  let configCount = configSteps
+
+  do {
+    let newConfigs: Array<any> = []
+
+    for (let i = 0; i < configs.length; i++) {
+      if (lIsConfigAccepted(configs[i])) {
+        return configs[i]
+      }
+    }
+
+    for (let i = 0; i < configs.length; i++) {
+      newConfigs = newConfigs.concat(stepFn(transitions, configs[i]))
+
+      configCount--
+
+      if (configCount === 0) {
+        yield stepIterations * configSteps
+        configCount = configSteps
+        stepIterations++
+      }
+    }
+
+    configs = newConfigs.slice()
+  } while (configs.length !== 0)
+
+  return null
+}

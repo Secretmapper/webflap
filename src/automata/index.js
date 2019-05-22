@@ -5,7 +5,7 @@ import Editor from './Editor'
 import ZoomedModal from './ZoomedModal'
 import Instructions from './Instructions'
 import Controls from './Controls'
-import { resolveConfig, initialConfig, step } from './helpers/tm'
+import { lazyResolveConfig, initialConfig, step } from './helpers/tm'
 import {
   useMultipleInputAutomata,
   useSavedAutomata,
@@ -40,7 +40,7 @@ export default function Automata() {
     initialConfig,
     initialState,
     multipleInput,
-    resolveConfig,
+    lazyResolveConfig,
     transitions
   })
 
