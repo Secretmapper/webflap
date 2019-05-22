@@ -33,7 +33,8 @@
     "react-use-localstorage": "^3.0.1-alpha.0",
     "typeface-montserrat": "^0.0.54",
     "typescript": "^3.2.4",
-    "use-debounce": "^2.0.2"
+    "use-debounce": "^2.0.2",
+    "use-react-router": "^1.0.7"
   },
   "scripts": {
     "start": "react-scripts start",
