@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(240, 240, 240, 1)',
     fontSize: 14,
     marginBottom: 4,
-    outline: 'none',
+    outlineStyle: 'none',
     padding: 8
   },
   controls: {
