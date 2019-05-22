@@ -1,26 +1,35 @@
 import React, { useCallback, useState } from 'react'
 import { StyleSheet, Button, Text, View } from 'react-native'
 import Sample from './Sample'
+import zeroN2Fixture from './0n2.fixture'
+import wwFixture from './w#w.fixture'
 
 type Props = {
+  onLoadFile: (data: any) => void
 }
-
 
 const sample = {
   id: '0n2',
   uri: `${process.env.PUBLIC_URL}/assets/img/0n2.png`,
-  text: '$${0^{2^{n}}|n\\geq 0}$$ i.e. 0s whose length is a power of 2'
+  text: '$${0^{2^{n}}|n\\geq 0}$$ i.e. 0s whose length is a power of 2',
+  data: zeroN2Fixture
 }
 
 const sample2 = {
   id: 'w#w',
   uri: `${process.env.PUBLIC_URL}/assets/img/w#w.png`,
-  text: '$${w\#w| w \in {0,1}^{\ast}}$$ i.e. two identical strings separated by #'
+  text: '$${w\#w| w \in {0,1}^{\ast}}$$ i.e. two identical strings separated by #',
+  data: wwFixture
 }
 
 export function Samples (props: Props) {
   const [selected, setSelected] = useState(null) as [string | null, any]
   const onLoadSample = useCallback((e) => {
+    if (selected === sample.id) {
+      props.onLoadFile(sample.data)
+    } else {
+      props.onLoadFile(sample2.data)
+    }
   }, [selected])
 
   return (

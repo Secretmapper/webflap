@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
+import nanoid from 'nanoid'
 import { StyleSheet, Button, TextInput, Picker, View } from 'react-native'
 import { useDebouncedCallback } from 'use-debounce'
 import Cytoscape from 'react-cytoscapejs'
@@ -133,8 +134,7 @@ export function AutomataEditor(props) {
         if (target === cy) {
           const node = ur.do('add', {
             data: {
-              // TODO: Add actual uuid generation
-              id: 'new' + Math.round(Math.random() * 100),
+              id: nanoid(),
               label: ''
             },
             position: {

@@ -1,3 +1,4 @@
+import nanoid from 'nanoid'
 import {
   AutomataConfiguration,
   AutomataTransitions,
@@ -79,7 +80,7 @@ export function step (
 
       configs.push({
         // TODO: use a hash from the path?
-        hash: '' + Math.random(),
+        hash: nanoid(),
         parent: configuration,
         state: transition.target,
         input: configuration.input,

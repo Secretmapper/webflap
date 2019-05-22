@@ -13,9 +13,9 @@ import {
   useSaveAsImage
 } from './hooks'
 
-export default function Automata() {
-  const [showModal, setShowModal] = useState(false)
+export default function Automata(props) {
   const [viewOtherFiles, setViewOtherFiles] = useState(false)
+  const { showModal, setShowModal } = props
   const onViewInstructions = useCallback(
     () => {
       setShowModal(true)
@@ -79,9 +79,9 @@ export default function Automata() {
     )
   })
 
+  const onLoadFile = props.onLoadFile
   const setCy = cy => {
     cyRef.current = cy
-    setShowModal(true)
   }
   const onSetMultipleInput = value => {
     setMultipleInput(value)
@@ -142,7 +142,7 @@ export default function Automata() {
           }
           modal={
             viewOtherFiles ? (
-              <Samples />
+              <Samples onLoadFile={onLoadFile} />
             ) : (
               <Instructions onClose={() => setShowModal(false)} />
             )

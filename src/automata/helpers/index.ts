@@ -1,4 +1,5 @@
 import flatten from 'lodash.flatten'
+import nanoid from 'nanoid'
 
 export const LAMBDA_CODE = String.fromCharCode(0x03bb)
 export const BLANK_CODE = String.fromCharCode(0x2423)
@@ -38,7 +39,7 @@ export type AutomataConfiguration = {
 
 export function initialConfig (initialState: number, input = 'bc') {
   return {
-    hash: '' + Math.random(),
+    hash: nanoid(),
     // TODO: Type this
     state: { data: { id: initialState } },
     input,
@@ -64,7 +65,7 @@ export function step (
     if (unprocessedInput.startsWith(transLabel)) {
       configs.push({
         // TODO: use a hash from the path?
-        hash: '' + Math.random(),
+        hash: nanoid(),
         parent: configuration,
         state: transition.target,
         input: configuration.input,
