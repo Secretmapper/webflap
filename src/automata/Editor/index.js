@@ -402,7 +402,7 @@ export function AutomataEditor(props) {
                 ref={inputElRight}
                 selectedValue={editing.valueRight || 'R'}
                 onValueChange={onTMDirectionChange}
-                style={styles.labelInput}
+                style={styles.labelInputPicker}
               >
                 <Picker.Item label="L" value="L" />
                 <Picker.Item label="R" value="R" />
@@ -510,6 +510,12 @@ const styles = StyleSheet.create({
     paddingRight: 4,
     paddingTop: 4,
     paddingBottom: 4
+  },
+  labelInputPicker: {
+    backgroundColor: 'rgba(244, 244, 244, 1)',
+    outlineWidth: 'thin',
+    margin: 2,
+    width: 80
   },
   labelInput: {
     backgroundColor: 'rgba(244, 244, 244, 1)',
