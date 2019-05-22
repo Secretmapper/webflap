@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { PulseLoader } from 'react-spinners'
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native'
 import useHover from '../../core/hooks/useHover'
 
@@ -49,6 +50,16 @@ function Row(props) {
         ]}
       >
         <Text>{props.string}</Text>
+        {props.loading && (
+          <View style={styles.loadingContainer}>
+            <PulseLoader
+              color="rgba(0, 0, 0, 1)"
+              loading
+              size={4}
+              sizeUnit={'px'}
+            />
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   )
@@ -60,6 +71,8 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     borderTopWidth: 1,
     cursor: 'pointer',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 1,
     paddingLeft: 8,
     paddingRight: 8,
@@ -80,5 +93,9 @@ const styles = StyleSheet.create({
   },
   rowHoveredRejected: {
     backgroundColor: '#ffd1d8'
+  },
+  loadingContainer: {
+    position: 'relative',
+    bottom: 3
   }
 })
