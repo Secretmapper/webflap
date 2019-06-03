@@ -10,9 +10,12 @@ export function Instructions(props) {
       <Text style={styles.text}>
         Create a node by clicking anywhere on the canvas
       </Text>
-      <Text style={styles.text}>Drag between two nodes to create an edge</Text>
       <Text style={styles.text}>
-        Long press/hold on a node/edge to set their labels
+        Click on the red circle and drag between two nodes to create an edge
+      </Text>
+      <Text style={styles.text}>
+        Long press/hold on a node/edge to show actions (edit labels, set as
+        initial/final state)
       </Text>
       <Text style={styles.textBottom}>
         You can view these instructions again at any time by clicking 'How to

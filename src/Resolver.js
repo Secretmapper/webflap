@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import nanoid from 'nanoid'
+import useLocalStorage from 'react-use-localstorage'
 import { Route } from 'react-router'
 import useReactRouter from 'use-react-router'
 import Automata from './automata'
@@ -8,8 +9,20 @@ import APILoadableAutomata from './automata/APILoadableAutomata'
 // TODO: Refactor (handle this in one place)
 function Resolver() {
   const [key, setKey] = useState('')
-  const [showModal, setShowModal] = useState(true)
+  const [hasShownTutorial, setHasShownTutorial] = useLocalStorage(
+    'editor__hasShownTutorial',
+    false
+  )
+  const [showModal, setShowModalRaw] = useState(!hasShownTutorial)
   const { history } = useReactRouter()
+
+  const setShowModal = useCallback(
+    b => {
+      setHasShownTutorial(true)
+      setShowModalRaw(b)
+    },
+    [setShowModalRaw]
+  )
 
   const onLoadFile = useCallback(
     data => {
