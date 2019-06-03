@@ -165,7 +165,7 @@ export default function useSavedAutomata(
   }, [])
 
   const [isSharing, setIsSharing] = useState(false)
-  const onShare = () => {
+  const onShare = useCallback(() => {
     setIsSharing(true)
     const data = JSON.stringify({
       'type': 'tm',
@@ -193,7 +193,7 @@ export default function useSavedAutomata(
       setIsSharing(false)
       return res.json()
     })
-  }
+  }, [initialState, finalStates, statesString, transitions, multipleInputString, setIsSharing])
 
   return [
     elements,

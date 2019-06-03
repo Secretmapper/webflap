@@ -56,13 +56,16 @@ export default function Automata(props) {
     onShareRaw,
     isSharing
   ] = saveHook
-  const onShare = useCallback(() => {
-    onShareRaw().then(data => {
-      shareAlert.show(
-        <ShareLink url={`${window.location.hostname}/diagram/${data.id}`} />
-      )
-    })
-  }, onShareRaw)
+  const onShare = useCallback(
+    () => {
+      onShareRaw().then(data => {
+        shareAlert.show(
+          <ShareLink url={`${window.location.hostname}/diagram/${data.id}`} />
+        )
+      })
+    },
+    [onShareRaw]
+  )
 
   const cyRef = useRef(null)
 
