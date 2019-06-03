@@ -145,13 +145,17 @@ export default function Controls(props) {
         <NavButton color="#9e9e9e" title="Back" onPress={() => setTab(null)} />
       )}
       {tab === null && (
-        <React.Fragment>
-          <NavButton title="Share" onPress={props.onShare} />
+        <View>
+          <NavButton
+            title="Share"
+            onPress={props.onShare}
+            disabled={props.isSharing}
+          />
           <NavButton
             title="Open Files/Examples"
             onPress={props.onViewOtherFiles}
           />
-        </React.Fragment>
+        </View>
       )}
       <Links onViewInstructions={props.onViewInstructions} />
     </View>

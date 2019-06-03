@@ -1,11 +1,13 @@
 import React, { useCallback, useRef, useState } from 'react'
 import flatten from 'lodash.flatten'
+import { useAlert } from 'react-alert'
 import Layout from './Layout'
 import Editor from './Editor'
 import ZoomedModal from './ZoomedModal'
 import Instructions from './Instructions'
 import Samples from './Samples'
 import Controls from './Controls'
+import ShareLink from './ShareLink'
 import { lazyResolveConfig, initialConfig, step } from './helpers/tm'
 import {
   useMultipleInputAutomata,
@@ -17,6 +19,8 @@ import {
 export default function Automata(props) {
   const [viewOtherFiles, setViewOtherFiles] = useState(false)
   const { showModal, setShowModal } = props
+  const shareAlert = useAlert()
+
   const onViewInstructions = useCallback(
     () => {
       setShowModal(true)
@@ -49,8 +53,17 @@ export default function Automata(props) {
     setInputString,
     multipleInput,
     setMultipleInput,
-    onShare
+    onShareRaw,
+    isSharing
   ] = saveHook
+  const onShare = useCallback(() => {
+    onShareRaw().then(data => {
+      shareAlert.show(
+        <ShareLink url={`${process.env.PUBLIC_URL}/diagram/${data.id}`} />
+      )
+    })
+  }, onShareRaw)
+
   const cyRef = useRef(null)
 
   const [layout, setLayout] = useState(undefined)
@@ -174,6 +187,7 @@ export default function Automata(props) {
           setMultipleInput={onSetMultipleInput}
           runMultipleInput={onRunMultipleInput}
           multipleInputConfigs={multipleInputConfigs}
+          isSharing={isSharing}
           onShare={onShare}
           onViewInstructions={onViewInstructions}
           onViewOtherFiles={onViewOtherFiles}

@@ -30,7 +30,9 @@ type UseSavedAutomataArray = [
   // setMultipleInput
   Function,
   // onShare
-  Function
+  Function,
+  // isSharing
+  boolean
 ]
 
 export function serializeTransitionMap (map: Map<string, Transition>) {
@@ -162,7 +164,9 @@ export default function useSavedAutomata(
     setFinalStatesString(serializeFinalStates(finalStates))
   }, [])
 
+  const [isSharing, setIsSharing] = useState(false)
   const onShare = () => {
+    setIsSharing(true)
     const data = JSON.stringify({
       'type': 'tm',
       'initial': initialState,
@@ -172,7 +176,9 @@ export default function useSavedAutomata(
       multipleInput: multipleInputString
     })
 
-    fetch('https://api.jsonbin.io/b', {
+    setIsSharing(false)
+
+    return fetch('https://api.jsonbin.io/b', {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -183,8 +189,10 @@ export default function useSavedAutomata(
       } as any,
       body: data
     })
-    .then((res) => res.json())
-    .then(console.log)
+    .then((res) => {
+      setIsSharing(false)
+      return res.json()
+    })
   }
 
   return [
@@ -200,6 +208,7 @@ export default function useSavedAutomata(
     setInputString,
     multipleInput,
     setMultipleInput,
-    onShare
+    onShare,
+    isSharing
   ]
 }
