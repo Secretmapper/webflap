@@ -167,32 +167,36 @@ export default function useSavedAutomata(
   const [isSharing, setIsSharing] = useState(false)
   const onShare = useCallback(() => {
     setIsSharing(true)
-    const data = JSON.stringify({
-      'type': 'tm',
-      'initial': initialState,
-      'final': serializeFinalStates(finalStates),
-      states: statesString,
-      transitions: serializeTransitionMap(transitions),
-      multipleInput: multipleInputString
-    })
+    // XXX: we're using a setTimeout to ensure the debounce is finished
+    setTimeout(
+      () => {
+        const data = JSON.stringify({
+          'type': 'tm',
+          'initial': initialState,
+          'final': serializeFinalStates(finalStates),
+          states: statesString,
+          transitions: serializeTransitionMap(transitions),
+          multipleInput: multipleInputString
+        })
 
-    setIsSharing(false)
-
-    return fetch('https://api.jsonbin.io/b', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-        'secret-key': SECRET_KEY,
-        'collection-id':	COLLECTION_ID,
-        'private': false
-      } as any,
-      body: data
-    })
-    .then((res) => {
-      setIsSharing(false)
-      return res.json()
-    })
+        return fetch('https://api.jsonbin.io/b', {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+            'secret-key': SECRET_KEY,
+            'collection-id':	COLLECTION_ID,
+            'private': false
+          } as any,
+          body: data
+        })
+        .then((res) => {
+          setIsSharing(false)
+          return res.json()
+        })
+      },
+      1000
+    )
   }, [initialState, finalStates, statesString, transitions, multipleInputString, setIsSharing])
 
   return [
