@@ -18,6 +18,7 @@ const styles = {
   container: {
     cursor: 'pointer',
     padding: 8,
+    wordBreak: 'break-word',
     width: '100%'
   },
   heading: {

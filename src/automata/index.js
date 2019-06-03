@@ -59,7 +59,7 @@ export default function Automata(props) {
   const onShare = useCallback(() => {
     onShareRaw().then(data => {
       shareAlert.show(
-        <ShareLink url={`//${window.location.hostname}/diagram/${data.id}`} />
+        <ShareLink url={`${window.location.hostname}/diagram/${data.id}`} />
       )
     })
   }, onShareRaw)
