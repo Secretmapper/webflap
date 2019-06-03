@@ -1,20 +1,15 @@
 import useLocalStorage from 'react-use-localstorage'
 import useSavedAutomata, { serializeTransitionMap, serializeFinalStates } from './useSavedAutomata'
-import {
-  initialState as initialStateFixture,
-  finalStates as finalStatesFixture,
-  states as statesFixture,
-  transitions as transitionsFixture
-} from '../tm.fixtures'
+import sample from '../Samples/0n2.fixture'
 
 function useSavedAutomataLocalStorage () {
   return useSavedAutomata(
     useLocalStorage,
     {
-      statesDefault: JSON.stringify(Array.from(statesFixture.values())),
-      transitionsDefault: serializeTransitionMap(transitionsFixture),
-      finalStatesDefault: serializeFinalStates(finalStatesFixture),
-      initialStateDefault: initialStateFixture
+      statesDefault: sample.states,
+      transitionsDefault: sample.transitions,
+      finalStatesDefault: sample.final,
+      initialStateDefault: sample.initial
     }
   )
 }
