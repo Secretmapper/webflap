@@ -49,7 +49,7 @@ function Links(props) {
             style={styles.authorLink}
             accessibilityRole="link"
             target="_blank"
-            href="//twitter.com/Secretmapper"
+            href="//github.com/Secretmapper"
           >
             @secretmapper
           </Text>
