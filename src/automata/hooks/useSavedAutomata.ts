@@ -42,6 +42,7 @@ export function serializeTransitionMap (map: Map<string, Transition>) {
       .map(([k, v]) => [k, { ...v, source: v.source.data.id, target: v.target.data.id }])
   )
 }
+const delay = (t: number) => new Promise(resolve => setTimeout(resolve, t))
 
 function deserializeTransitionMap (transitionsString: string, statesMap: Map<string, any>): Map<string, Transition> {
   const transitionsArray = JSON.parse(transitionsString)
@@ -168,18 +169,18 @@ export default function useSavedAutomata(
   const onShare = useCallback(() => {
     setIsSharing(true)
     // XXX: we're using a setTimeout to ensure the debounce is finished
-    setTimeout(
-      () => {
-        const data = JSON.stringify({
-          'type': 'tm',
-          'initial': initialState,
-          'final': serializeFinalStates(finalStates),
-          states: statesString,
-          transitions: serializeTransitionMap(transitions),
-          multipleInput: multipleInputString
-        })
+    const data = JSON.stringify({
+      'type': 'tm',
+      'initial': initialState,
+      'final': serializeFinalStates(finalStates),
+      states: statesString,
+      transitions: serializeTransitionMap(transitions),
+      multipleInput: multipleInputString
+    })
 
-        return fetch('https://api.jsonbin.io/b', {
+    return delay(1000)
+      .then(
+        () => fetch('https://api.jsonbin.io/b', {
           method: 'POST',
           mode: 'cors',
           headers: {
@@ -194,9 +195,7 @@ export default function useSavedAutomata(
           setIsSharing(false)
           return res.json()
         })
-      },
-      1000
-    )
+      )
   }, [initialState, finalStates, statesString, transitions, multipleInputString, setIsSharing])
 
   return [
