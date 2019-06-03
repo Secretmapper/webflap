@@ -161,7 +161,10 @@ export default function Automata(props) {
           }
           modal={
             viewOtherFiles ? (
-              <Samples onLoadFile={onLoadFile} />
+              <Samples
+                onCancel={() => setShowModal(false)}
+                onLoadFile={onLoadFile}
+              />
             ) : (
               <Instructions onClose={() => setShowModal(false)} />
             )

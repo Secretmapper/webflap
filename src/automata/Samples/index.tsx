@@ -5,6 +5,7 @@ import zeroN2Fixture from './0n2.fixture'
 import wwFixture from './w#w.fixture'
 
 type Props = {
+  onCancel: (e: any) => void,
   onLoadFile: (data: any) => void
 }
 
@@ -51,7 +52,7 @@ export function Samples (props: Props) {
       </View>
       <View style={styles.actions}>
         <View style={styles.cancelBtn}>
-          <Button title='Cancel' onPress={() => {}} color='#9D9D9D' />
+          <Button title='Cancel' onPress={props.onCancel} color='#9D9D9D' />
         </View>
         <Button disabled={!selected} title='Load' onPress={onLoadSample} />
       </View>
