@@ -3,6 +3,7 @@ import { StyleSheet, Button, Text, View } from 'react-native'
 import Sample from './Sample'
 import zeroN2Fixture from './0n2.fixture'
 import wwFixture from './w#w.fixture'
+import loopFixture from './loop.fixture'
 
 type Props = {
   onCancel: (e: any) => void,
@@ -23,13 +24,22 @@ const sample2 = {
   data: wwFixture
 }
 
+const sample3 = {
+  id: 'loop',
+  uri: `${process.env.PUBLIC_URL}/assets/img/loop.png`,
+  text: 'infinite loop example: loop on any 0, accept if first is 1 $${ 1w | w \in {0,1}^{\ast}}$$ ',
+  data: loopFixture
+}
+
 export function Samples (props: Props) {
   const [selected, setSelected] = useState(null) as [string | null, any]
   const onLoadSample = useCallback((e) => {
     if (selected === sample.id) {
       props.onLoadFile(sample.data)
-    } else {
+    } else if (selected === sample2.id) {
       props.onLoadFile(sample2.data)
+    } else if (selected === sample3.id) {
+      props.onLoadFile(sample3.data)
     }
   }, [selected])
 
@@ -48,6 +58,7 @@ export function Samples (props: Props) {
         <View style={styles.samples}>
           <Sample selected={selected === sample.id} sample={sample} onSelectSample={setSelected} />
           <Sample selected={selected === sample2.id} sample={sample2} onSelectSample={setSelected} />
+          <Sample selected={selected === sample3.id} sample={sample3} onSelectSample={setSelected} />
         </View>
       </View>
       <View style={styles.actions}>
