@@ -38,7 +38,8 @@ export function Samples (props: Props) {
         <Text style={styles.heading}>
           My Files
         </Text>
-        <View style={styles.samples}>
+        <View style={styles.myFiles}>
+          <Text style={styles.myFilesText}>Coming Soon...</Text>
         </View>
         <Text style={styles.heading}>
           Turing Machine Examples
@@ -66,6 +67,16 @@ const styles = StyleSheet.create({
     paddingBottom: 16
   },
   samplesWindow: {
+  },
+  myFiles: {
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 50,
+    marginBottom: 8
+  },
+  myFilesText: {
+    fontSize: 16
   },
   samples: {
     // flexDirection: 'row'
