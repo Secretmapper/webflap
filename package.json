@@ -21,6 +21,7 @@
     "react": "16.8.0-alpha.1",
     "react-alert": "^5.5.0",
     "react-art": "^16.7.0",
+    "react-custom-scrollbars": "^4.2.1",
     "react-cytoscapejs": "^1.1.0",
     "react-dom": "^16.8.0-alpha.1",
     "react-dropzone": "^8.0.3",

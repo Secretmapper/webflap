@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     transform: [{ translateX: '-50%' }, { translateY: '-50%' }],
     maxWidth: 800,
     maxHeight: '90%',
-    overflow: 'scroll',
+    overflow: 'auto',
     width: '90%'
   }
 })

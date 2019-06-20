@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { StyleSheet, Button, Picker, View } from 'react-native'
 import Modal from 'modal-enhanced-react-native-web'
+import { Scrollbars } from 'react-custom-scrollbars'
 import Heading from '../../core/Heading'
 import Configurations from '../Configurations'
 import MultipleInput from '../MultipleInput'
@@ -57,7 +58,7 @@ export default function Controls(props) {
       <Heading style={styles.subheading}>
         Modern Finite Automaton Maker and Visualizer
       </Heading>
-      <View style={styles.main}>
+      <Scrollbars style={styles.main}>
         <Modal
           style={styles.modal}
           transparent={true}
@@ -140,7 +141,7 @@ export default function Controls(props) {
             )}
           </React.Fragment>
         )}
-      </View>
+      </Scrollbars>
       {tab !== null && (
         <NavButton color="#9e9e9e" title="Back" onPress={() => setTab(null)} />
       )}
